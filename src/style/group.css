@@ -69,7 +69,7 @@ img {
   margin-top: 30px;
   font-weight: bold;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   margin-right: 10px;
 }
@@ -89,6 +89,7 @@ img {
   background-color: #105368;
 }
 .friend-content addCircleRoundedIcon {
+  align-items: flex-start;
   width: 200px;
   background-color: #105368;
 }

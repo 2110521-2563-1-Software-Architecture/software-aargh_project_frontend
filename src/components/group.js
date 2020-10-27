@@ -16,13 +16,25 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 // import openSocket from "socket.io-client";
 // const socket = openSocket("http://edfb4850.ngrok.io/");
 
+//mock
+const added_friends = ["mill","jin"]
 class Group extends React.Component {
   state = {
-    available_groups: [],
     my_groups: [],
+    added_friends: [],
     user: false,
     group: "",
+    open: false
   };
+
+  handleOpen = () => {
+    if (this.state.open == true){
+      this.setState({open:false})
+    }
+    else {
+      this.setState({open:true})
+    }
+  }
 
   componentDidMount() {
     try {
@@ -89,35 +101,29 @@ class Group extends React.Component {
             ></TextField>
           </div>
           <div className="friend-content">
-            <o1 style={{ marginRight: "20px" }}>Friend List:</o1>
             <List>
-              <ListItem button > 
-              {/* onClick={handleOpen}> */}
+              <ListItem button onClick={this.handleOpen}>
                 <ListItemIcon>
                   {" "}
                   <GroupIcon />{" "}
                 </ListItemIcon>
                 <ListItemText primary="Friend Added" />
-                {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+                {this.state.open ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
-              {/* <Collapse in={open} timeout="auto" unmountOnExit> */}
-                {/* <List>
+              <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                <List>
                   {added_friends.map((text) => (
                     <ListItem
                       button
                       key={text}
-                      className={classes.nested}
-                      onClick={(e) => {
-                        onGetMessages(text);
-                      }}
                     >
                       <ListItemText primary={text} />
                     </ListItem>
                   ))}
-                </List> */}
-              {/* </Collapse> */}
+                </List>
+              </Collapse>
             </List>
-            <AddCircleRoundedIcon style={{ color: "#105368" }} />
+            <AddCircleRoundedIcon style={{ color: "#105368", marginTop: "20px"}} />
           </div>
           <div className="create-content">
             <Button
