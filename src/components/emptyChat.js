@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, TextField } from "@material-ui/core";
 import "./../style/chat.css";
 import Drawer from "./drawer";
 import ChatMessages from "./chat-messages";
+
+import { Button, TextField } from "@material-ui/core";
+
 import DeleteIcon from "@material-ui/icons/Delete";
 
 // import openSocket from "socket.io-client";
