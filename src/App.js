@@ -9,6 +9,7 @@ import Group from "./components/group";
 import EmptyChat from "./components/emptyChat";
 import history from "./logic/history";
 import "./style/index.css";
+import Register from "./components/register";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/chat" component={Chat} />
         <Route path="/group" component={Group} />
         <Route path="/emptyChat" component={EmptyChat} />
+        <Route path="/register" component={Register} />
       </Switch>
     </Router>
   );
