@@ -38,14 +38,12 @@ class Join extends React.Component {
           <p>LikeWhatsApp</p>
         </div>
         <div className="center">
-          <div className="">
-            <h1>Welcome,</h1>
-            <TextField
-              placeholder="Please enter your name"
-              value={this.state.name}
-              onChange={(e) => this.setState({ name: e.target.value })}
-            ></TextField>
-          </div>
+          <h1>Welcome,</h1>
+          <TextField
+            placeholder="Please enter your name"
+            value={this.state.name}
+            onChange={(e) => this.setState({ name: e.target.value })}
+          ></TextField>
           <div className="login-button">
             <Button
               component={Link}

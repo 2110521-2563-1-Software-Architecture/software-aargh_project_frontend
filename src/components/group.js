@@ -175,10 +175,7 @@ const Group = () => {
           />
         </div>
         <div className="create-content">
-          <Button
-            onClick={handleCreate}
-            style={{ borderRadius: 40, color: "white" }}
-          >
+          <Button onClick={handleCreate} style={{ color: "white" }}>
             Create
           </Button>
         </div>
