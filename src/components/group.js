@@ -63,7 +63,6 @@ class Group extends React.Component {
     return (
       <div className="group">
         <Drawer
-          available_groups={this.state.available_groups}
           my_groups={this.state.my_groups}
           onGetMessages={this.onGetMessages}
           user={this.state.user}

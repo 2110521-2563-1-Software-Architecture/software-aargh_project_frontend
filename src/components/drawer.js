@@ -96,38 +96,6 @@ const NavBar = ({
       </div>
       <Divider />
 
-      <div className={classes.list} role="presentation">
-        <List>
-          <ListItem button onClick={handleClick}>
-            <ListItemIcon>
-              {" "}
-              <GroupAddIcon />{" "}
-            </ListItemIcon>
-            <ListItemText primary="Avaliable groups" />
-            {click ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={click} timeout="auto" unmountOnExit>
-            <List>
-              {available_groups.map((text) => (
-                <ListItem
-                  button
-                  key={text}
-                  className={classes.nested}
-                  onClick={(e) => {
-                    onGetMessages(text);
-                  }}
-                >
-                  <ListItemText primary={text} />
-                  <ListItemSecondaryAction>
-                    <AddIcon edge="end" />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </Collapse>
-        </List>
-        <Divider />
-
         <List>
           <ListItem button onClick={handleOpen}>
             <ListItemIcon>
@@ -173,7 +141,6 @@ const NavBar = ({
           </ListItem>
         </List>
       </div>
-    </div>
   );
 
   return (
