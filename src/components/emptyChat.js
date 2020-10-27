@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./../style/chat.css";
 import Drawer from "./drawer";
 import ChatMessages from "./chat-messages";
