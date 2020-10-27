@@ -117,14 +117,6 @@ class Group extends React.Component {
                 </List> */}
               {/* </Collapse> */}
             </List>
-            {/* <TextField
-              style={{ marginRight: "20px" }}
-              placeholder="Friend List"
-              value={this.state.group}
-              onChange={(e) => {
-                this.setState({ group: e.target.value });
-              }}
-            ></TextField> */}
             <AddCircleRoundedIcon style={{ color: "#105368" }} />
           </div>
           <div className="create-content">
