@@ -1,0 +1,39 @@
+.root {
+  height: 100vh;
+}
+
+.titleBar {
+  background-color: #105368;
+  color: white;
+  font-style: normal;
+  height: 8vh;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  height: 200px;
+  width: 15em;
+}
+
+.login-button {
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.purple-bg {
+  background-color: mediumpurple;
+}
+
+.yellow-bg {
+  background-color: palegoldenrod;
+}

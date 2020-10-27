@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import TestPage1 from "./pages/TestPage1";
+import TestPage2 from "./pages/TestPage2";
+import Join from "./components/join";
+import Chat from "./components/chat";
+import Group from "./components/group";
+import EmptyChat from "./components/emptyChat";
+import history from "./logic/history";
+import "./style/index.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router history={history}>
+      <Switch>
+        <Route path="/" exact component={Join} />
+        <Route path="/chat" component={Chat} />
+        <Route path="/group" component={Group} />
+        <Route path="/emptyChat" component={EmptyChat} />
+      </Switch>
+    </Router>
   );
 }
 
