@@ -73,10 +73,16 @@ img {
   justify-content: center;
   margin-right: 10px;
 }
+.create-button {
+  width: 100px;
+  align-items: center;
+  color: #105368;
+}
 
 .create-button button{
   width: 100px;
-  color: #105368;
+  align-items: center;
+  background-color: #105368;
 }
 .friend-content button {
   width: 200px;
