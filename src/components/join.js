@@ -33,8 +33,8 @@ class Join extends React.Component {
     return (
       <div className="root">
         <div className="titleBar">
-          <img src={logo}></img>
-          <p>EGGIE</p>
+          <img className="logo" src={logo}></img>
+          <p>LikeWhatsApp</p>
         </div>
         <div className="center">
           <div className="">

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, TextField } from "@material-ui/core";
 import "./../style/chat.css";
-import eggie1 from "./../asset/eggie1.png";
 import Drawer from "./drawer";
 import ChatMessages from "./chat-messages";
 import DeleteIcon from "@material-ui/icons/Delete";
