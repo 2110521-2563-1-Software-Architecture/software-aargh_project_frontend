@@ -5,6 +5,14 @@ import eggie1 from "../asset/eggie1.png";
 import { Link } from "react-router-dom";
 import { Button, TextField } from "@material-ui/core";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
+import GroupIcon from "@material-ui/icons/Group";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 // import openSocket from "socket.io-client";
 // const socket = openSocket("http://edfb4850.ngrok.io/");
 
@@ -82,14 +90,41 @@ class Group extends React.Component {
           </div>
           <div className="friend-content">
             <o1 style={{ marginRight: "20px" }}>Friend List:</o1>
-            <TextField
+            <List>
+              <ListItem button > 
+              {/* onClick={handleOpen}> */}
+                <ListItemIcon>
+                  {" "}
+                  <GroupIcon />{" "}
+                </ListItemIcon>
+                <ListItemText primary="Friend Added" />
+                {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+              </ListItem>
+              {/* <Collapse in={open} timeout="auto" unmountOnExit> */}
+                {/* <List>
+                  {added_friends.map((text) => (
+                    <ListItem
+                      button
+                      key={text}
+                      className={classes.nested}
+                      onClick={(e) => {
+                        onGetMessages(text);
+                      }}
+                    >
+                      <ListItemText primary={text} />
+                    </ListItem>
+                  ))}
+                </List> */}
+              {/* </Collapse> */}
+            </List>
+            {/* <TextField
               style={{ marginRight: "20px" }}
               placeholder="Friend List"
               value={this.state.group}
               onChange={(e) => {
                 this.setState({ group: e.target.value });
               }}
-            ></TextField>
+            ></TextField> */}
             <AddCircleRoundedIcon style={{ color: "#105368" }} />
           </div>
           <div className="create-content">
