@@ -24,18 +24,36 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 // const socket = openSocket("http://edfb4850.ngrok.io/");
 
 //mock
-const ADDED_FRIENDS = ["mill", "jin"];
+const ADDED_FRIENDS = [];
 const ALL_FRIENDS = ["mill", "jin", "yin", "nut", "pam", "focus"];
 
 function FriendsDialog(props) {
   const { onClose, selectedValue, open } = props;
+  const [checked, setChecked] = useState([]);
 
   const handleClose = () => {
+    ADDED_FRIENDS.length = 0
+    {checked.map((value, index) => {
+      ADDED_FRIENDS.push(value) 
+    })}   
     onClose(selectedValue);
   };
 
   const handleListItemClick = (value) => {
     onClose(value);
+  };
+
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
   };
 
   return (
@@ -51,8 +69,8 @@ function FriendsDialog(props) {
               <FormControlLabel
                 control={
                   <Checkbox
-                    // checked={checked}
-                    // onChange={}
+                    checked={checked.indexOf(friend) !== -1}
+                    onChange={handleToggle(friend)}
                     color="primary"
                   />
                 }
