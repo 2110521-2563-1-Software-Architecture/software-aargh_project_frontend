@@ -4,6 +4,7 @@ import Drawer from "./drawer";
 import eggie1 from "../asset/eggie1.png";
 import { Link } from "react-router-dom";
 import { Button, TextField } from "@material-ui/core";
+import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 // import openSocket from "socket.io-client";
 // const socket = openSocket("http://edfb4850.ngrok.io/");
 
@@ -83,25 +84,20 @@ class Group extends React.Component {
           <div className="friend-content">
             <o1 style={{ marginRight: "20px" }}>Friend List:</o1>
             <TextField
-              style={{ marginRight: "20px"}}
+              style={{ marginRight: "20px" }}
               placeholder="Friend List"
               value={this.state.group}
               onChange={(e) => {
                 this.setState({ group: e.target.value });
               }}
             ></TextField>
-            <Button
-              onClick={this.handleAddfriend} //[TODO] : implement handleAddfriend
-              style={{ borderRadius: 40, color: "white" }}
-             >
-              Add friend to group
-            </Button>
+            <AddCircleRoundedIcon style={{ color: "#105368" }} />
           </div>
-          <div className="create-button">
+          <div className="create-content">
             <Button
               onClick={this.handleCreate}
               style={{ borderRadius: 40, color: "white" }}
-             >
+            >
               Create
             </Button>
           </div>

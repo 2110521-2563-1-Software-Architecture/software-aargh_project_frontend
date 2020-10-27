@@ -73,18 +73,22 @@ img {
   justify-content: center;
   margin-right: 10px;
 }
-.create-button {
-  width: 100px;
+.create-content {
+  margin-top: 30px;
+  display: flex;
   align-items: center;
-  color: #105368;
+  justify-content: center;
 }
 
-.create-button button{
+.create-content button {
   width: 100px;
-  align-items: center;
   background-color: #105368;
 }
 .friend-content button {
+  width: 200px;
+  background-color: #105368;
+}
+.friend-content addCircleRoundedIcon {
   width: 200px;
   background-color: #105368;
 }
