@@ -31,7 +31,9 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    flex: 1,
     flexDirection: "column",
+    minHeight: "100%",
   },
   drawer: {
     [theme.breakpoints.up("sm")]: {
@@ -63,6 +65,12 @@ const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  group: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
 }));
 
 const NavBar = ({
@@ -91,11 +99,12 @@ const NavBar = ({
   const sideList = (
     <div className={classes.root}>
       <CssBaseline />
-      <div className={classes.toolbar} style={{ fontSize: "24px" }}>
-        <b>EGGIE</b>
+      <div className={classes.toolbar} style={{ fontSize: "24px", height: 54 }}>
+        <b>LikeWhatsApp</b>
       </div>
       <Divider />
 
+      <div className={classes.group}>
         <List>
           <ListItem button onClick={handleOpen}>
             <ListItemIcon>
@@ -122,25 +131,25 @@ const NavBar = ({
             </List>
           </Collapse>
         </List>
-        <Divider />
 
-        <List>
-          <ListItem
-            button
-            onClick={() => {
-              history.push({
-                pathname: "/group",
-                state: { user: user },
-              });
+        <div>
+          <Divider />
+          <Button
+            style={{
+              display: "flex",
+              alignItems: "center",
+              minWidth: "100%",
+              margin: "10px 0 10px 0",
             }}
           >
-            <ListItemIcon>
-              <AddCircleRoundedIcon />{" "}
-            </ListItemIcon>
-            <ListItemText primary="Create new group" />
-          </ListItem>
-        </List>
+            <AddCircleRoundedIcon
+              style={{ color: "#105368", marginRight: "10px" }}
+            />
+            <div>Create new group</div>
+          </Button>
+        </div>
       </div>
+    </div>
   );
 
   return (
@@ -152,7 +161,6 @@ const NavBar = ({
           justifyContent: "flex-end",
         }}
       >
-        <img src={eggie1}></img>
         <div style={{ marginRight: "20px" }}> {user} </div>
         <span> | </span>
         <Link
