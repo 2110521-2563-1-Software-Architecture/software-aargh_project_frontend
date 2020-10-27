@@ -13,6 +13,8 @@ import Collapse from "@material-ui/core/Collapse";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import GroupIcon from "@material-ui/icons/Group";
@@ -45,12 +47,17 @@ function FriendsDialog(props) {
       >
         <List>
           {ALL_FRIENDS.map((friend) => (
-            <ListItem
-              button
-              key={friend}
-              onClick={() => handleListItemClick(friend)}
-            >
-              <ListItemText primary={friend} />
+            <ListItem button key={friend}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    // checked={checked}
+                    // onChange={}
+                    color="primary"
+                  />
+                }
+                label={friend}
+              />
             </ListItem>
           ))}
         </List>
