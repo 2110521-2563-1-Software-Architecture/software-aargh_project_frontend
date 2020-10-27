@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import "./../style/group.css";
 import Drawer from "./drawer";
-import eggie1 from "../asset/eggie1.png";
 import { Link } from "react-router-dom";
+
 import { Button, TextField } from "@material-ui/core";
-import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Collapse from "@material-ui/core/Collapse";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+
+import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import GroupIcon from "@material-ui/icons/Group";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -17,41 +22,76 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 // const socket = openSocket("http://edfb4850.ngrok.io/");
 
 //mock
-const added_friends = ["mill","jin"]
-class Group extends React.Component {
-  state = {
-    my_groups: [],
-    added_friends: [],
-    user: false,
-    group: "",
-    open: false
+const ADDED_FRIENDS = ["mill", "jin"];
+const ALL_FRIENDS = ["mill", "jin", "yin", "nut", "pam", "focus"];
+
+function FriendsDialog(props) {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
   };
 
-  handleOpen = () => {
-    if (this.state.open == true){
-      this.setState({open:false})
-    }
-    else {
-      this.setState({open:true})
-    }
-  }
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
 
-  componentDidMount() {
-    try {
-      //1. get user's groups {status: complete}
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>All Friends</DialogTitle>
+      <DialogContent
+        dividers={true}
+        style={{ width: "400px", height: "250px" }}
+      >
+        <List>
+          {ALL_FRIENDS.map((friend) => (
+            <ListItem
+              button
+              key={friend}
+              onClick={() => handleListItemClick(friend)}
+            >
+              <ListItemText primary={friend} />
+            </ListItem>
+          ))}
+        </List>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
-      console.log("componentDidMount");
-      // socket.emit('getGroupUpdates', this.props.location.state.user)
-      // socket.on('groupinfo', (data) => {
-      //     this.setState({ available_groups: data.group, my_groups: data.joinedGroup, user: this.props.location.state.user })
-      //     console.log(this.state)
-      // })
-    } catch (e) {
-      console.log(e);
+FriendsDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+};
+
+const Group = () => {
+  const [my_groups, setMy_groups] = useState([]);
+  const [added_friends, setAdded_friends] = useState([]);
+  const [user, setUser] = useState(false);
+  const [group, setGroup] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState([]);
+  const [toggle, setToggle] = useState(false);
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = (value) => {
+    setDialogOpen(false);
+    setSelectedValue(value);
+  };
+
+  const handleToggle = () => {
+    if (toggle == true) {
+      setToggle(false);
+    } else {
+      setToggle(true);
     }
-  }
+  };
 
-  handleCreate = () => {
+  const handleCreate = () => {
     // if (!!this.state.group) {
     //   socket.emit("create", {
     //     member: this.state.user,
@@ -68,75 +108,76 @@ class Group extends React.Component {
     //     });
     //   });
     // }
-    console.log(this.state.group);
+    console.log(group);
   };
 
-  onGetMessages = (groupName) => {
+  const onGetMessages = (groupName) => {
     // socket.emit("join", { group: groupName, member: this.state.user });
-    this.props.history.push({
-      pathname: "/chat",
-      state: { user: this.state.user, group: groupName },
-    });
+    // this.props.history.push({
+    //   pathname: "/chat",
+    //   state: { user: this.state.user, group: groupName },
+    // });
   };
 
-  render() {
-    return (
-      <div className="group">
-        <Drawer
-          my_groups={this.state.my_groups}
-          onGetMessages={this.onGetMessages}
-          user={this.state.user}
-        ></Drawer>
-        <div className="group-panel">
-          <div className="group-header">CREATE NEW GROUP</div>
-          <div className="group-content">
-            <o1 style={{ marginRight: "20px" }}>Group Name:</o1>
-            <TextField
-              style={{ marginRight: "20px" }}
-              placeholder="Group Name"
-              value={this.state.group}
-              onChange={(e) => {
-                this.setState({ group: e.target.value });
-              }}
-            ></TextField>
-          </div>
-          <div className="friend-content">
-            <List>
-              <ListItem button onClick={this.handleOpen}>
-                <ListItemIcon>
-                  {" "}
-                  <GroupIcon />{" "}
-                </ListItemIcon>
-                <ListItemText primary="Friend Added" />
-                {this.state.open ? <ExpandLess /> : <ExpandMore />}
-              </ListItem>
-              <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                <List>
-                  {added_friends.map((text) => (
-                    <ListItem
-                      button
-                      key={text}
-                    >
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Collapse>
-            </List>
-            <AddCircleRoundedIcon style={{ color: "#105368", marginTop: "20px"}} />
-          </div>
-          <div className="create-content">
-            <Button
-              onClick={this.handleCreate}
-              style={{ borderRadius: 40, color: "white" }}
-            >
-              Create
-            </Button>
-          </div>
+  return (
+    <div className="group">
+      <Drawer
+        my_groups={my_groups}
+        onGetMessages={onGetMessages}
+        user={user}
+      ></Drawer>
+      <div className="group-panel">
+        <div className="group-header">CREATE NEW GROUP</div>
+        <div className="group-content">
+          <o1 style={{ marginRight: "20px" }}>Group Name:</o1>
+          <TextField
+            style={{ marginRight: "20px" }}
+            placeholder="Group Name"
+            value={group}
+            onChange={(e) => setGroup(e.target.value)}
+          ></TextField>
+        </div>
+        <div className="friend-content">
+          <List>
+            <ListItem button onClick={handleToggle}>
+              <ListItemIcon>
+                {" "}
+                <GroupIcon />{" "}
+              </ListItemIcon>
+              <ListItemText primary="Friend Added" />
+              {toggle ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={toggle} timeout="auto" unmountOnExit>
+              <List>
+                {ADDED_FRIENDS.map((text) => (
+                  <ListItem button key={text}>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+            </Collapse>
+          </List>
+          <AddCircleRoundedIcon
+            style={{ color: "#105368", marginTop: "20px", marginLeft: "10px" }}
+            onClick={handleDialogOpen}
+          />
+          <FriendsDialog
+            selectedValue={selectedValue}
+            open={dialogOpen}
+            onClose={handleDialogClose}
+          />
+        </div>
+        <div className="create-content">
+          <Button
+            onClick={handleCreate}
+            style={{ borderRadius: 40, color: "white" }}
+          >
+            Create
+          </Button>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Group;
