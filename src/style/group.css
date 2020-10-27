@@ -65,6 +65,23 @@ img {
   margin-right: 10px;
 }
 
+.friend-content {
+  margin-top: 30px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.create-button button{
+  width: 100px;
+  color: #105368;
+}
+.friend-content button {
+  width: 200px;
+  background-color: #105368;
+}
 .group-content button {
   width: 100px;
   background-color: #105368;

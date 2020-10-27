@@ -79,10 +79,29 @@ class Group extends React.Component {
                 this.setState({ group: e.target.value });
               }}
             ></TextField>
+          </div>
+          <div className="friend-content">
+            <o1 style={{ marginRight: "20px" }}>Friend List:</o1>
+            <TextField
+              style={{ marginRight: "20px"}}
+              placeholder="Friend List"
+              value={this.state.group}
+              onChange={(e) => {
+                this.setState({ group: e.target.value });
+              }}
+            ></TextField>
+            <Button
+              onClick={this.handleAddfriend} //[TODO] : implement handleAddfriend
+              style={{ borderRadius: 40, color: "white" }}
+             >
+              Add friend to group
+            </Button>
+          </div>
+          <div className="create-button">
             <Button
               onClick={this.handleCreate}
               style={{ borderRadius: 40, color: "white" }}
-            >
+             >
               Create
             </Button>
           </div>
