@@ -20,8 +20,9 @@ import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import GroupIcon from "@material-ui/icons/Group";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-// import openSocket from "socket.io-client";
-// const socket = openSocket("http://edfb4850.ngrok.io/");
+
+import axios from "axios";
+import backend from "../ip"
 
 //mock
 const ADDED_FRIENDS = [];
@@ -31,6 +32,11 @@ function FriendsDialog(props) {
   const { onClose, selectedValue, open } = props;
   const [checked, setChecked] = useState([]);
 
+  const getAllUsers = async () => {
+    const response = await axios.get(
+      backend+'/users'
+    );
+  }
   const handleClose = () => {
     ADDED_FRIENDS.length = 0
     {checked.map((value, index) => {
@@ -117,22 +123,7 @@ const Group = () => {
   };
 
   const handleCreate = () => {
-    // if (!!this.state.group) {
-    //   socket.emit("create", {
-    //     member: this.state.user,
-    //     group: this.state.group,
-    //   });
-    //   socket.on("groupcreation completed", () => {
-    //     console.log("create group complete");
-    //     socket.emit("getGroupUpdates", this.state.user);
-    //     socket.on("groupinfo", (data) => {
-    //       this.setState({
-    //         available_groups: data.group,
-    //         my_groups: data.joinedGroup,
-    //       });
-    //     });
-    //   });
-    // }
+    
     console.log(group);
   };
 
