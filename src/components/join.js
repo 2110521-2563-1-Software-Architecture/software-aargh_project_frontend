@@ -30,6 +30,10 @@ class Join extends React.Component {
     }
   }
 
+  onClickRegister() {
+    console.log(this.state.name);
+  }
+
   render() {
     return (
       <div className="root">
@@ -40,10 +44,17 @@ class Join extends React.Component {
         <div className="center">
           <h1>Welcome,</h1>
           <TextField
-            placeholder="Please enter your name"
+            placeholder="Username"
             value={this.state.name}
             onChange={(e) => this.setState({ name: e.target.value })}
           ></TextField>
+          <TextField
+            // ref='password'
+            placeholder="Password"
+            hintText="Password"
+            floatingLabelText="Password"
+            type="password">
+          </TextField>
           <div className="login-button">
             <Button
               component={Link}
@@ -57,6 +68,22 @@ class Join extends React.Component {
               onClick={(e) => this.onClickLogin()}
             >
               Log in
+            </Button>
+           </div>
+          <div className="register-button">
+            <p>Don't have an account?</p>
+            <Button style = {{backgroundcolor: "gray"}}
+              component={Link}
+              to={{
+                pathname: "/register",
+                state: { user: this.state.name },
+              }}
+              color="inherite"
+              // params={{ user: this.state.name }}
+              // disabled={!this.state.name}
+              onClick={(e) => this.onClickRegister()}
+            >
+              Register
             </Button>
           </div>
         </div>

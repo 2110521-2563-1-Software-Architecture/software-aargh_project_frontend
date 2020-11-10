@@ -26,6 +26,11 @@
   transform: translate(-50%, -50%);
   height: 200px;
   width: 15em;
+  text-align: center;
+}
+
+.center h1 {
+  text-align: left;
 }
 
 .login-button {
@@ -34,6 +39,17 @@
   display: flex;
   justify-content: flex-end;
   margin-top: 15px;
+}
+
+.register-button {
+  color: #105368;
+  font-size: 12px;
+  text-align: center;
+}
+
+.register-button Button {
+  background-color: #105368;
+  font-size: small;
 }
 
 .purple-bg {
