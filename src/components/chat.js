@@ -2,19 +2,18 @@ import React from "react";
 import "./../style/chat.css";
 import Drawer from "./drawer";
 import ChatMessages from "./chat-messages";
-import { TimeGrayBox, UnreadGrayBox } from "./grayBox";
 
 import { Button, TextField } from "@material-ui/core";
 
 import axios from "axios";
 import backend from "../ip";
 
-// MOCK DATA
-const CID = 1;
+// MOCK DATA from get message
+const CID = "5fad2eccbd84bb000e50cfc3";
 const USER = 'Yinza55+';
 const GROUP = 'Group 1';
 const MESSAGE = [{ user: 'me', message: 'Hello' }];
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNDMwMTI5YzA1MDAwZWQ1YjViNyIsImlhdCI6MTYwNTE2Mjg1OX0.QjstVEl0PCwVMI7ZMs1QZdkQgsb58e48wvIPZfCTJ5I";
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNDMwMTI5YzA1MDAwZWQ1YjViNyIsImlhdCI6MTYwNTE4NjQwNH0.FTf74zzgeqdWe9Y3Q9mU3yRKISymxset1ywsv1SzDUI";
 
 class Chat extends React.Component {
   state = {
@@ -23,7 +22,8 @@ class Chat extends React.Component {
     user: USER,
     group: GROUP,
     currentMessage: "",
-    messages: MESSAGE
+    messages: MESSAGE,
+    token: TOKEN
   }
 
   componentDidMount() {
@@ -48,31 +48,26 @@ class Chat extends React.Component {
   }
 
   onSendMessage = async () => {
-    const { cid, currentMessage } = this.state;
+    const { cid, currentMessage, token } = this.state;
 
-    //TODO: uncomment and check after POST is connected
-    // const response = await axios.post(backend + "/message/send", {
-    //   cid,
-    //   content: currentMessage,
-    //   type: "TEXT"
-    // }, {
-    //   header: {
-    //     // 'Authorization': `Basic ${token}`
-    //     // MOCK TOKEN
-    //     'Authorization': `Basic ${TOKEN}`
-    //   }
-    // });
-    // const { success, message } = response.data;
-    // if (success) {
-    //   console.log(message);
-    // } else {
-    //   this.setState({ error: message });
-    // }
-    
-    // TODO: delete this setState after complate connect API
-    this.setState({ messages: { user: 'me', message: this.state.currentMessage } });
+    // TODO: uncomment and check after POST is connected
+    const response = await axios.post(backend + "/message/send", {
+      cid: cid,
+      content: currentMessage,
+      type: "TEXT"
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
 
-    this.setState({ currentMessage: "" });
+    if (response.data === "sent") {
+      console.log("send message");
+      this.setState({ currentMessage: "" });
+    } else {
+      console.log("ERROR");
+    }
+
   };
 
   onTextFiledPressEnter = (e) => {
