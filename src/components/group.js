@@ -25,24 +25,13 @@ import axios from "axios";
 import backend from "../ip"
 
 //mock
-const ADDED_FRIENDS = [];
-const ALL_FRIENDS = ["mill", "jin", "yin", "nut", "pam", "focus"];
+var ADDED_FRIENDS = [];
+var ALL_FRIENDS = [{"id":"5fa6f0ca45eb51877885fb1b","username":"focus","name":"focus"},{"id":"5fa6f1b045eb51877885fb1c","username":"focus2","name":"focus"},{"id":"5facd430129c05000ed5b5b7","username":"ajin","name":"jin"},{"id":"5facd785129c05000ed5b5b8","username":"millmill","name":"mill"}] //["mill", "jin", "yin", "nut", "pam", "focus"];
 
 function FriendsDialog(props) {
-  const { onClose, selectedValue, open } = props;
+  const { onClose, selectedValue, open, all_friends } = props;
   const [checked, setChecked] = useState([]);
 
-  const getAllUsers = async () => {
-    const response = await axios.get(
-      backend+'/users'
-    );
-    const { success, request } = response.data;
-    if (success) {
-      this.setState({ list: request });
-      console.log(request)
-      // ALL_FRIENDS = request
-    }
-  }
   const handleClose = () => {
     ADDED_FRIENDS.length = 0
     {checked.map((value, index) => {
@@ -76,7 +65,7 @@ function FriendsDialog(props) {
         style={{ width: "400px", height: "250px" }}
       >
         <List>
-          {ALL_FRIENDS.map((friend) => (
+          {all_friends.map((friend) => (
             <ListItem button key={friend}>
               <FormControlLabel
                 control={
@@ -99,6 +88,7 @@ function FriendsDialog(props) {
 FriendsDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  all_friends: PropTypes.array.isRequired,
   selectedValue: PropTypes.string.isRequired,
 };
 
@@ -110,8 +100,27 @@ const Group = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [all_friends,setall_friends] = useState([]);
+
+  const getAllUsers = async () => {
+    let config = {
+      headers: {
+        'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE2Mjk0Mn0.M3Y20V24T71_x7COAILYEdkY60RGDUtnHpvo0XBKclg' // + validToken() //[TODO - ADD TOKEN FROM LOGIN] -- and replace it at validToken()
+      }
+    }
+    const response = await axios.get(
+      backend+'/users',config
+    ); 
+    const { success, request } = response.data;
+    if (success) {
+      this.setState({ list: request });
+    }
+    console.log('All',ALL_FRIENDS)
+    setall_friends(ALL_FRIENDS) // allfriend list
+  }
 
   const handleDialogOpen = () => {
+    getAllUsers();
     setDialogOpen(true);
   };
 
@@ -131,7 +140,7 @@ const Group = () => {
   const handleCreate = async () => {
     //[TODO : add create method]
     try {
-      const response = await axios.post(backend + "/create", {
+      const response = await axios.post(backend + "/chat/create", {
         //[TODO] add information needed to be sent to backend 
         // ...form,
         // photo: userImage,
@@ -201,6 +210,7 @@ const Group = () => {
           <FriendsDialog
             selectedValue={selectedValue}
             open={dialogOpen}
+            all_friends={all_friends}
             onClose={handleDialogClose}
           />
         </div>
