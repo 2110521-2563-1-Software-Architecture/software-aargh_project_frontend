@@ -8,12 +8,28 @@ import { Button, TextField } from "@material-ui/core";
 import axios from "axios";
 import backend from "../ip";
 
-// MOCK DATA from get message
-const CID = "5fad2eccbd84bb000e50cfc3";
+import firebase from 'firebase';
+
+// MOCK DATA
+const CID = "5facdb7e129c05000ed5b5b9";
 const USER = 'Yinza55+';
 const GROUP = 'Group 1';
 const MESSAGE = [{ user: 'me', message: 'Hello' }];
-const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNDMwMTI5YzA1MDAwZWQ1YjViNyIsImlhdCI6MTYwNTE4NjQwNH0.FTf74zzgeqdWe9Y3Q9mU3yRKISymxset1ywsv1SzDUI";
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE4ODc5MH0.3bb5DdqOCrxmhqfi5LskaB364xIBFGH2J4sUeNNwcwY";
+
+// import openSocket from "socket.io-client";
+// const socket = openSocket('http://edfb4850.ngrok.io/');
+
+const firebaseConfig = {
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+firebase.initializeApp(firebaseConfig);
 
 class Chat extends React.Component {
   state = {
@@ -23,6 +39,9 @@ class Chat extends React.Component {
     group: GROUP,
     currentMessage: "",
     messages: MESSAGE,
+    image_url: "",
+    currentPhotoFile: null,
+    isLoading: false,
     token: TOKEN
   }
 
@@ -68,6 +87,72 @@ class Chat extends React.Component {
       console.log("ERROR");
     }
 
+  };
+
+  onChoosePhoto = event => {
+    if (event.target.files && event.target.files[0]) {
+        this.setState({isLoading: true})
+        this.currentPhotoFile = event.target.files[0]
+        // Check this file is an image?
+        const prefixFiletype = event.target.files[0].type.toString()
+        if (prefixFiletype.indexOf('image/') === 0) {
+            this.uploadPhoto()
+            // console.log(this.currentPhotoFile.name)
+        } else {
+            this.setState({isLoading: false})
+            console.log('This file is not an image')
+        }
+    } else {
+        this.setState({isLoading: false})
+    }
+}
+
+uploadPhoto = () => {
+  if (this.currentPhotoFile) {
+
+    const uploadTask = firebase
+      .storage().ref(this.currentPhotoFile.name)
+      .put(this.currentPhotoFile)
+
+      uploadTask.on(
+          'state_changed',
+          null,
+          err => {
+              this.setState({isLoading: false})
+              console.log(err.message)
+          },
+          () => {
+              uploadTask.snapshot.ref.getDownloadURL().then(url => {
+                this.setState({isLoading: false, image_url:url})
+                this.onSendImage()
+                // console.log(this.state)
+              })
+          }
+      )
+  } else {
+      this.setState({isLoading: false})
+      console.log('File is null')
+  }
+}
+
+  onSendImage = async () => {
+    const { cid, image_url, token } = this.state;
+    const response = await axios.post(backend + "/message/send", {
+      cid: cid,
+      content: image_url,
+      type: "IMAGE"
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    //const { success, message } = response.data;
+    if (response.data === "sent") {
+      console.log("sent");
+    } else {
+      // this.setState({ error: message });
+      console.log("error")
+    }
   };
 
   onTextFiledPressEnter = (e) => {
@@ -133,6 +218,12 @@ class Chat extends React.Component {
             ></TextField>
             <Button onClick={this.onSendMessage}>Send</Button>
           </div>
+          <input ref={el => { this.refInput = el }}
+            accept="image/*"
+            className="viewInputGallery"
+            type="file"
+            onChange={this.onChoosePhoto}
+          />
         </div>
       </div>
     );
