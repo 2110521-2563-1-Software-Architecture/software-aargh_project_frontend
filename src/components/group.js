@@ -77,7 +77,7 @@ function FriendsDialog({
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={checked.indexOf(id) !== -1}
+                    checked={checked.indexOf(username) !== -1}
                     onChange={handleToggle({id,username})}
                     color="primary"
                   />
