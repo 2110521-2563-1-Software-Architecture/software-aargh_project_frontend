@@ -59,7 +59,7 @@ function FriendsDialog({
       newChecked.splice(currentIndex, 1);
       id_list.splice(currentIndex, 1);
     }
-
+    console.log(newChecked)
     setChecked(newChecked);
     setSelected_id(id_list);
   };
@@ -77,8 +77,8 @@ function FriendsDialog({
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={checked.indexOf(username) !== -1}
-                    onChange={handleToggle({id, username})}
+                    checked={checked.indexOf(id) !== -1}
+                    onChange={handleToggle({id,username})}
                     color="primary"
                   />
                 }
@@ -102,11 +102,13 @@ const Group = () => {
   const [selectedValue, setSelectedValue] = useState([]);
   const [toggle, setToggle] = useState(false);
   const [all_friends,setall_friends] = useState([]);
+  const [added_users, setAdded_users] = useState([]);
 
   const getAllUsers = async () => {
+    // [TODO] - recheck axios and response  
     // let config = {
     //   headers: {
-    //     'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE2Mjk0Mn0.M3Y20V24T71_x7COAILYEdkY60RGDUtnHpvo0XBKclg' // + validToken() //[TODO - ADD TOKEN FROM LOGIN] -- and replace it at validToken()
+    //     'Authorization': 'Bearer ' // + validToken() //[TODO - ADD TOKEN FROM LOGIN] -- and replace it at validToken()
     //   }
     // }
     // const response = await axios.get(
@@ -116,7 +118,6 @@ const Group = () => {
     // if (success) {
     //   this.setState({ list: request });
     // }
-    // console.log('All',ALL_FRIENDS)
     setall_friends(ALL_FRIENDS) // allfriend list
   }
 
@@ -140,19 +141,13 @@ const Group = () => {
 
   const handleCreate = async () => {
     console.log(added_friends_id) // added_friends_id should be sent as a body to backend
-    //[TODO : add create method]
     try {
-      const response = await axios.post(backend + "/chat/create", {
-        //[TODO] add information needed to be sent to backend 
-        // ...form,
-        // photo: userImage,
-      });
-      //[TODO] recheck parameter received from the 
-      const { success, information, message } = response.data;
-      // if (success) {
-      // } else {
-      //   console.log(message);
-      // }
+      const response = await axios.post(backend + "/chat/create", {uid:added_friends_id});
+      const { success, message } = response.data;
+      if (success) {
+      } else {
+        console.log(message);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -213,7 +208,6 @@ const Group = () => {
             open={dialogOpen}
             all_friends={all_friends}
             setAdded_friends={setAdded_friends}
-            setAdded_friends_id={setAdded_friends_id}
             onClose={handleDialogClose}
           />
         </div>
