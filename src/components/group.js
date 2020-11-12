@@ -25,8 +25,8 @@ import axios from "axios";
 import backend from "../ip"
 
 //mock
-var ALL_FRIENDS = [{"id":"5fa6f0ca45eb51877885fb1b","username":"focus","name":"focus"},{"id":"5fa6f1b045eb51877885fb1c","username":"focus2","name":"focus"},{"id":"5facd430129c05000ed5b5b7","username":"ajin","name":"jin"},{"id":"5facd785129c05000ed5b5b8","username":"millmill","name":"mill"}] //["mill", "jin", "yin", "nut", "pam", "focus"];
-
+//var ALL_FRIENDS = [{"id":"5fa6f0ca45eb51877885fb1b","username":"focus","name":"focus"},{"id":"5fa6f1b045eb51877885fb1c","username":"focus2","name":"focus"},{"id":"5facd430129c05000ed5b5b7","username":"ajin","name":"jin"},{"id":"5facd785129c05000ed5b5b8","username":"millmill","name":"mill"}] //["mill", "jin", "yin", "nut", "pam", "focus"];
+var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE4ODE1M30.15j1gNc5BmCbflJt0lTax_GyKIb4jDCC87ZzOxufC9k"
 function FriendsDialog({ 
   onClose, 
   open, 
@@ -106,19 +106,19 @@ const Group = () => {
 
   const getAllUsers = async () => {
     // [TODO] - recheck axios and response  
-    // let config = {
-    //   headers: {
-    //     'Authorization': 'Bearer ' // + validToken() //[TODO - ADD TOKEN FROM LOGIN] -- and replace it at validToken()
-    //   }
-    // }
-    // const response = await axios.get(
-    //   backend+'/users',config
-    // ); 
-    // const { success, request } = response.data;
-    // if (success) {
-    //   this.setState({ list: request });
-    // }
-    setall_friends(ALL_FRIENDS) // allfriend list
+    let config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      } 
+    }
+    const response = await axios.get(
+       backend +'/users',config
+    ); 
+    //const { success, request } = response.data;
+    //if (success) {
+      setall_friends(response.data) // allfriend list
+      //this.setState({ list: request });
+    //}
   }
 
   const handleDialogOpen = () => {
@@ -140,18 +140,23 @@ const Group = () => {
   };
 
   const handleCreate = async () => {
-    console.log(added_friends_id) // added_friends_id should be sent as a body to backend
+    //console.log(added_friends_id) // added_friends_id should be sent as a body to backend
     try {
-      const response = await axios.post(backend + "/chat/create", {uid:added_friends_id});
-      const { success, message } = response.data;
-      if (success) {
-      } else {
-        console.log(message);
+      let config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        } 
       }
+      const response = await axios.post(backend + "/chat/create", {uid:added_friends_id},config);
+      //const { success, message } = response.data;
+      //if (success) {
+      //} else {
+      //  console.log(message);
+      //}
     } catch (e) {
       console.log(e);
     }
-    console.log(group);
+    console.log('group:',group);
   };
 
   const onGetMessages = (groupName) => {
@@ -208,6 +213,7 @@ const Group = () => {
             open={dialogOpen}
             all_friends={all_friends}
             setAdded_friends={setAdded_friends}
+            setAdded_friends_id={setAdded_friends_id}
             onClose={handleDialogClose}
           />
         </div>
