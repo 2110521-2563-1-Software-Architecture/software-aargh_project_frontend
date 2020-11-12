@@ -10,6 +10,7 @@ import axios from "axios";
 import backend from "../ip";
 
 // MOCK DATA
+const CID = 1;
 const USER = 'Yinza55+';
 const GROUP = 'Group 1';
 const MESSAGE = [{ user: 'me', message: 'Hello' }];
@@ -18,7 +19,7 @@ const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNDMwMTI5YzA1
 class Chat extends React.Component {
   state = {
     my_groups: [],
-    cid: '1',
+    cid: CID,
     user: USER,
     group: GROUP,
     currentMessage: "",
@@ -57,6 +58,7 @@ class Chat extends React.Component {
     // }, {
     //   header: {
     //     // 'Authorization': `Basic ${token}`
+    //     // MOCK TOKEN
     //     'Authorization': `Basic ${TOKEN}`
     //   }
     // });
@@ -121,7 +123,6 @@ class Chat extends React.Component {
               user={this.state.user}
               group={this.state.group}
             ></ChatMessages>
-            {console.log(this.state.messages)}
           </div>
           <div className="message-box">
             <TextField
