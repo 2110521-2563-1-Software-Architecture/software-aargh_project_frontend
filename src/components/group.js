@@ -28,8 +28,7 @@ import backend from "../ip"
 var ADDED_FRIENDS = [];
 var ALL_FRIENDS = [{"id":"5fa6f0ca45eb51877885fb1b","username":"focus","name":"focus"},{"id":"5fa6f1b045eb51877885fb1c","username":"focus2","name":"focus"},{"id":"5facd430129c05000ed5b5b7","username":"ajin","name":"jin"},{"id":"5facd785129c05000ed5b5b8","username":"millmill","name":"mill"}] //["mill", "jin", "yin", "nut", "pam", "focus"];
 
-function FriendsDialog(props) {
-  const { onClose, selectedValue, open, all_friends } = props;
+function FriendsDialog({ onClose, selectedValue, open, all_friends }) {
   const [checked, setChecked] = useState([]);
 
   const handleClose = () => {
@@ -65,17 +64,17 @@ function FriendsDialog(props) {
         style={{ width: "400px", height: "250px" }}
       >
         <List>
-          {all_friends.map((friend) => (
-            <ListItem button key={friend}>
+          {all_friends.map(({id, username, name}) => (
+            <ListItem button key={id}>
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={checked.indexOf(friend) !== -1}
-                    onChange={handleToggle(friend)}
+                    checked={checked.indexOf(id) !== -1}
+                    onChange={handleToggle(id)}
                     color="primary"
                   />
                 }
-                label={friend}
+                label={name}
               />
             </ListItem>
           ))}
@@ -84,13 +83,6 @@ function FriendsDialog(props) {
     </Dialog>
   );
 }
-
-FriendsDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  all_friends: PropTypes.array.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
 
 const Group = () => {
   const [my_groups, setMy_groups] = useState([]);
@@ -103,19 +95,19 @@ const Group = () => {
   const [all_friends,setall_friends] = useState([]);
 
   const getAllUsers = async () => {
-    let config = {
-      headers: {
-        'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE2Mjk0Mn0.M3Y20V24T71_x7COAILYEdkY60RGDUtnHpvo0XBKclg' // + validToken() //[TODO - ADD TOKEN FROM LOGIN] -- and replace it at validToken()
-      }
-    }
-    const response = await axios.get(
-      backend+'/users',config
-    ); 
-    const { success, request } = response.data;
-    if (success) {
-      this.setState({ list: request });
-    }
-    console.log('All',ALL_FRIENDS)
+    // let config = {
+    //   headers: {
+    //     'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE2Mjk0Mn0.M3Y20V24T71_x7COAILYEdkY60RGDUtnHpvo0XBKclg' // + validToken() //[TODO - ADD TOKEN FROM LOGIN] -- and replace it at validToken()
+    //   }
+    // }
+    // const response = await axios.get(
+    //   backend+'/users',config
+    // ); 
+    // const { success, request } = response.data;
+    // if (success) {
+    //   this.setState({ list: request });
+    // }
+    // console.log('All',ALL_FRIENDS)
     setall_friends(ALL_FRIENDS) // allfriend list
   }
 
