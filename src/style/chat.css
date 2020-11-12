@@ -13,6 +13,8 @@
   margin-top: 55px;
   height: calc(100% - 55px);
   width: calc(100% - 240px);
+  display: flex;
+  flex-direction: column;
 }
 
 .olive-bg {
@@ -39,7 +41,6 @@
 
 .chat-group-name {
   /* background-color: white; */
-  height: 8%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,8 +50,8 @@
 
 .chat-content {
   background-color: rgb(255, 236, 185);
-  height: 78vh;
   display: flex;
+  flex: 1;
   flex-direction: row;
   align-items: center;
   width: 100%;

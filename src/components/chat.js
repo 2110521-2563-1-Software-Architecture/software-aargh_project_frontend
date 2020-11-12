@@ -6,20 +6,24 @@ import { TimeGrayBox, UnreadGrayBox } from "./grayBox";
 
 import { Button, TextField } from "@material-ui/core";
 
-import DeleteIcon from "@material-ui/icons/Delete";
+import axios from "axios";
+import backend from "../ip";
 
-// import openSocket from "socket.io-client";
-// const socket = openSocket('http://edfb4850.ngrok.io/');
+// MOCK DATA
+const USER = 'Yinza55+';
+const GROUP = 'Group 1';
+const MESSAGE = [{ user: 'me', message: 'Hello' }];
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNDMwMTI5YzA1MDAwZWQ1YjViNyIsImlhdCI6MTYwNTE2Mjg1OX0.QjstVEl0PCwVMI7ZMs1QZdkQgsb58e48wvIPZfCTJ5I";
 
 class Chat extends React.Component {
   state = {
-    available_groups: [],
     my_groups: [],
-    user: false,
-    group: "",
+    cid: '1',
+    user: USER,
+    group: GROUP,
     currentMessage: "",
-    messages: [],
-  };
+    messages: MESSAGE
+  }
 
   componentDidMount() {
     try {
@@ -42,29 +46,31 @@ class Chat extends React.Component {
     }
   }
 
-  handleDelete = () => {
-    this.props.history.push({
-      pathname: "/emptyChat",
-      state: { user: this.state.user, group: this.state.group },
-    });
-    // socket.emit("leave", { member: this.state.user, group: this.state.group });
-    // socket.on("groupinfo", (data) => {
-    //   this.setState({ messages: data });
-    // });
-  };
+  onSendMessage = async () => {
+    const { cid, currentMessage } = this.state;
 
-  onSendMessage = (e) => {
-    console.log("send message");
-    // if (!!this.state.currentMessage) {
-    //   socket.emit("send", {
-    //     user: this.state.user,
-    //     group: this.state.group,
-    //     time: new Date(),
-    //     message: this.state.currentMessage,
-    //   }); // chat = {user,group,time,message}
-    //   this.onGetMessages(this.state.group);
-    //   this.setState({ currentMessage: "" });
+    //TODO: uncomment and check after POST is connected
+    // const response = await axios.post(backend + "/message/send", {
+    //   cid,
+    //   content: currentMessage,
+    //   type: "TEXT"
+    // }, {
+    //   header: {
+    //     // 'Authorization': `Basic ${token}`
+    //     'Authorization': `Basic ${TOKEN}`
+    //   }
+    // });
+    // const { success, message } = response.data;
+    // if (success) {
+    //   console.log(message);
+    // } else {
+    //   this.setState({ error: message });
     // }
+    
+    // TODO: delete this setState after complate connect API
+    this.setState({ messages: { user: 'me', message: this.state.currentMessage } });
+
+    this.setState({ currentMessage: "" });
   };
 
   onTextFiledPressEnter = (e) => {
@@ -87,36 +93,35 @@ class Chat extends React.Component {
     return (
       <div className="chat">
         <Drawer
-          available_groups={this.state.available_groups}
           my_groups={this.state.my_groups}
           onGetMessages={this.onGetMessages}
           user={this.state.user}
         ></Drawer>
         <div className="chat-panel">
           <div
+            className="chat-group-name" 
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "center",
               padding: "16px 16px",
+              fontSize: "18px"
             }}
           >
-            <div className="chat-group-name" style={{ fontSize: "18px" }}>
-              {this.state.group.toUpperCase()}
-            </div>
-            <DeleteIcon onClick={this.handleDelete}></DeleteIcon>
+            {this.state.group.toUpperCase()}
           </div>
           <div
             className="chat-content"
             style={{ display: "flex", flexDirection: "column" }}
           >
-            {/* <TimeGrayBox /> */}
-            {/* <UnreadGrayBox /> */}
             <ChatMessages
-              messages={this.state.messages[this.state.group]}
-              user={this.props.location.state.user}
+              // messages={this.state.messages[this.state.group]}
+              // user={this.props.location.state.user}
+              messages={this.state.messages}
+              user={this.state.user}
               group={this.state.group}
             ></ChatMessages>
+            {console.log(this.state.messages)}
           </div>
           <div className="message-box">
             <TextField
@@ -130,7 +135,7 @@ class Chat extends React.Component {
               }}
               onKeyDown={this.onTextFiledPressEnter}
             ></TextField>
-            <Button onClick={(e) => this.onSendMessage(e)}>Send</Button>
+            <Button onClick={this.onSendMessage}>Send</Button>
           </div>
         </div>
       </div>
