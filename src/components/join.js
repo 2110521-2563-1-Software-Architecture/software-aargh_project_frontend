@@ -1,40 +1,43 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./../style/join.css";
 import logo from "./../asset/logo.png";
-
 import { Button, TextField } from "@material-ui/core";
 
-// import openSocket from "socket.io-client";
-// const socket = openSocket("http://edfb4850.ngrok.io/");
+import axios from "axios";
+import backend from "../ip";
 
 class Join extends React.Component {
-  state = {
-    name: "",
-    room: "",
+  state = { username: null, password: null, error: "" };
+  login = async() => {
+    const { username, password } = this.state;
+    // const response = await axios.post(backend + "/login", {
+    //   username,
+    //   password,
+    // });
+
+    // const { success, message } = response.data;
+    console.log({ username, password })
+
+ //TODO: check after POST is connected
+
+    // if (success) {
+    //   console.log(message);
+    //   this.props.history.push({
+    //     pathname: "/group",
+    //     state: { user: this.state.username },
+    //   });
+    // } else {
+    //   this.setState({ error: message });
+    // }
   };
 
-  userLogin(value) {
-    this.setState({
-      name: value,
-    });
-    // socket.emit("login", this.state.name);
-    console.log(this.state.name);
-    // console.log(socket);
-  }
-
-  onClickLogin() {
-    console.log(this.state.name);
-    if (!!this.state.name) {
-      this.userLogin(this.state.name);
-    }
-  }
-
   onClickRegister() {
-    console.log(this.state.name);
+    console.log(this.state.username);
   }
 
   render() {
+    const { username, password, error } = this.state;
     return (
       <div className="root">
         <div className="titleBar">
@@ -45,30 +48,23 @@ class Join extends React.Component {
           <h1>Welcome,</h1>
           <TextField
             placeholder="Username"
-            value={this.state.name}
-            onChange={(e) => this.setState({ name: e.target.value })}
+            value={this.state.username}
+            onChange={(e) => this.setState({ username: e.target.value })}
           ></TextField>
           <TextField
             // ref='password'
             placeholder="Password"
             hintText="Password"
             floatingLabelText="Password"
-            type="password">
-          </TextField>
+            type="password"
+            value={this.state.password}
+            onChange={(e) => this.setState({ password: e.target.value })}
+          ></TextField>
           <div className="login-button">
             <Button
-              component={Link}
-              to={{
-                pathname: "/group",
-                state: { user: this.state.name },
-              }}
               color="inherite"
-              // params={{ user: this.state.name }}
-              // disabled={!this.state.name}
-              onClick={(e) => this.onClickLogin()}
-            >
-              Log in
-            </Button>
+              onClick={(e) => this.login()}
+            >Log in</Button>
            </div>
           <div className="register-button">
             <p>Don't have an account?</p>
@@ -79,8 +75,6 @@ class Join extends React.Component {
                 state: { user: this.state.name },
               }}
               color="inherite"
-              // params={{ user: this.state.name }}
-              // disabled={!this.state.name}
               onClick={(e) => this.onClickRegister()}
             >
               Register

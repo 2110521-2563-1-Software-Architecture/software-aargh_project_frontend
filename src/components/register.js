@@ -1,23 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from '@material-ui/core/TextField';
 import { Button} from "@material-ui/core";
 import "./../style/register.css";
+import { withRouter } from "react-router-dom";
 
-class Register extends React.Component {
+import axios from "axios";
+import backend from "../ip"
 
-    onClickCancel = () => {
-        this.props.history.push({
-          pathname: "/",
+    const Register = ({ history, handleLogin }) => {
+        const [errorMessage, setErrorMessage] = useState("");
+        const [form, setForm] = useState({
+          name: null,
+          username: null,
+          password: null,
+          phone_number: null,
         });
-      };
-
-      onClickRegister = () => {
-        this.props.history.push({
-          pathname: "/group",
+        const [error, setError] = useState({
+          name: false,
+          username: false,
+          password: false,
+          phone_number: false,
         });
-      };
       
-    render() {
+        const validate = () => {
+          setError({
+            name: !form.name,
+            username: !form.username,
+            password: !form.password,
+            phone_number: !form.phone_number,
+          });
+          return !(
+            error.name ||
+            error.username ||
+            error.password ||
+            error.phone_number
+          );
+        };
+      
+        const handleRegister = async () => {
+
+            console.log("success")
+    // TODO check after POST is done
+        //   if (validate()) {
+        //     try {
+        //       const response = await axios.post(backend + "/user/register", {
+        //         ...form,
+        //       });
+        //       const { success, message } = response.data;
+              
+        //       if (success) {
+        //         console.log("success")
+        //         // const user = information[0];
+        //         // handleLogin(user);
+        //         history.push("/");
+        //       } else {
+        //         setErrorMessage(message);
+        //       }
+        //     } catch (e) {
+        //       console.log(e);
+        //       setErrorMessage("Invalid data, please check your input again");
+        //     }
+        //   }
+        };    
+
         return (
             <div className="root">
                 <div className="titleBar">
@@ -34,25 +79,42 @@ class Register extends React.Component {
 
                     <div className="row">
                         <div className="form">
-                            <TextField required id="standard-required" label="Name" fullWidth/>
+                            <TextField required 
+                            id="standard-required" 
+                            label="Name" fullWidth
+                            onChange={(e) => setForm({ ...form, name: e.target.value })}
+                            />
                         </div>
                     </div>
 
                     <div className="row">
                          <div className="form">
-                            <TextField required id="standard-required" label="Username"fullWidth/>
+                            <TextField required 
+                            id="standard-required" 
+                            label="Username"fullWidth
+                            onChange={(e) => setForm({ ...form, username: e.target.value })}
+                            />
                         </div>
                     </div>
                 
                     <div className="row">
                         <div className="form">
-                            <TextField required id="standard-password-input" label="Password" type="password"fullWidth/>
+                            <TextField required 
+                            id="standard-password-input" 
+                            label="Password" 
+                            type="password"fullWidth
+                            onChange={(e) => setForm({ ...form, password: e.target.value })}
+                            />
                         </div>
                     </div>
                 
                     <div className="row">
                         <div className="form">
-                            <TextField required id="standard-required" label="Phone number"fullWidth/>
+                            <TextField required 
+                            id="standard-required" 
+                            label="Phone number"fullWidth
+                            onChange={(e) => setForm({ ...form, phone_number: e.target.value })}
+                            />
                         </div>
                     </div>
 
@@ -62,11 +124,11 @@ class Register extends React.Component {
                 <div className="row">
                         <div className="outlinedBtn">
                             <Button color="inherit" fullWidth
-                                onClick={(e) => this.onClickCancel()}>Cancel</Button>
+                                onClick={(e) => history.push("/")}>Cancel</Button>
                         </div>
                         <div className="containedBtn">
                             <Button color="inherit" fullWidth
-                                onClick={(e) => this.onClickRegister()}>Register</Button>
+                                onClick={(e) => handleRegister()}>Register</Button>
                         </div>
                     </div>
 
@@ -75,7 +137,6 @@ class Register extends React.Component {
 
         );
       }
-    }
     
-    export default Register;
+    export default withRouter(Register);
     
