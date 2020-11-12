@@ -36,6 +36,12 @@ function FriendsDialog(props) {
     const response = await axios.get(
       backend+'/users'
     );
+    const { success, request } = response.data;
+    if (success) {
+      this.setState({ list: request });
+      console.log(request)
+      // ALL_FRIENDS = request
+    }
   }
   const handleClose = () => {
     ADDED_FRIENDS.length = 0
@@ -122,8 +128,23 @@ const Group = () => {
     }
   };
 
-  const handleCreate = () => {
-    
+  const handleCreate = async () => {
+    //[TODO : add create method]
+    try {
+      const response = await axios.post(backend + "/create", {
+        //[TODO] add information needed to be sent to backend 
+        // ...form,
+        // photo: userImage,
+      });
+      //[TODO] recheck parameter received from the 
+      const { success, information, message } = response.data;
+      // if (success) {
+      // } else {
+      //   console.log(message);
+      // }
+    } catch (e) {
+      console.log(e);
+    }
     console.log(group);
   };
 

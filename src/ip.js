@@ -1,3 +1,2 @@
-//[TO-DO]: Edit backend path
-const backend = "http://localhost:4000";
+const backend = "https://web-test-6h3gdtd3cq-as.a.run.app";
 export default backend;
