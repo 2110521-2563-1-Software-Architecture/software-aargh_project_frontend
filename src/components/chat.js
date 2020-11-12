@@ -21,13 +21,13 @@ const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1
 // const socket = openSocket('http://edfb4850.ngrok.io/');
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBISweht8fYIVVhM3WqwfZQ_5fDZW-SGVU",
-  authDomain: "web-test-6b88c.firebaseapp.com",
-  databaseURL: "https://web-test-6b88c.firebaseio.com",
-  projectId: "web-test-6b88c",
-  storageBucket: "web-test-6b88c.appspot.com",
-  messagingSenderId: "233711291286",
-  appId: "1:233711291286:web:9741997a6767a49f"
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
 };
 firebase.initializeApp(firebaseConfig);
 
