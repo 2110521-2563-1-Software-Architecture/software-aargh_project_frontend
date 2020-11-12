@@ -105,8 +105,7 @@ const Group = () => {
   const [all_friends,setall_friends] = useState([]);
   const [added_users, setAdded_users] = useState([]);
 
-  const getAllUsers = async () => {
-    // [TODO] - recheck axios and response  
+  const getAllUsersButMe = async () => { 
     let config = {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -122,12 +121,11 @@ const Group = () => {
         all_users_but_me.push(user) 
       }
     })}
-    setall_friends(all_users_but_me) // allfriend list
- 
+    setall_friends(all_users_but_me)
   }
 
   const handleDialogOpen = () => {
-    getAllUsers();
+    getAllUsersButMe();
     setDialogOpen(true);
   };
 
