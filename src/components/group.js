@@ -25,35 +25,43 @@ import axios from "axios";
 import backend from "../ip"
 
 //mock
-var ADDED_FRIENDS = [];
 var ALL_FRIENDS = [{"id":"5fa6f0ca45eb51877885fb1b","username":"focus","name":"focus"},{"id":"5fa6f1b045eb51877885fb1c","username":"focus2","name":"focus"},{"id":"5facd430129c05000ed5b5b7","username":"ajin","name":"jin"},{"id":"5facd785129c05000ed5b5b8","username":"millmill","name":"mill"}] //["mill", "jin", "yin", "nut", "pam", "focus"];
 
-function FriendsDialog({ onClose, selectedValue, open, all_friends }) {
+function FriendsDialog({ 
+  onClose, 
+  open, 
+  all_friends, 
+  setAdded_friends,
+  setAdded_friends_id
+}) {
   const [checked, setChecked] = useState([]);
+  const [selected_id, setSelected_id] = useState([]);
 
   const handleClose = () => {
-    ADDED_FRIENDS.length = 0
-    {checked.map((value, index) => {
-      ADDED_FRIENDS.push(value) 
-    })}   
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
+    var friends = [];
+    {checked.map((username, index) => {
+      friends.push(username) 
+    })}
+    setAdded_friends(friends);
+    setAdded_friends_id(selected_id);
+    onClose();
   };
 
   const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
+    const currentIndex = checked.indexOf(value.username);
     const newChecked = [...checked];
+    const id_list = [...selected_id];
 
     if (currentIndex === -1) {
-      newChecked.push(value);
+      newChecked.push(value.username);
+      id_list.push(value.id);
     } else {
       newChecked.splice(currentIndex, 1);
+      id_list.splice(currentIndex, 1);
     }
 
     setChecked(newChecked);
+    setSelected_id(id_list);
   };
 
   return (
@@ -64,17 +72,17 @@ function FriendsDialog({ onClose, selectedValue, open, all_friends }) {
         style={{ width: "400px", height: "250px" }}
       >
         <List>
-          {all_friends.map(({id, username, name}) => (
+          {all_friends.map(({id, username}) => (
             <ListItem button key={id}>
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={checked.indexOf(id) !== -1}
-                    onChange={handleToggle(id)}
+                    checked={checked.indexOf(username) !== -1}
+                    onChange={handleToggle({id, username})}
                     color="primary"
                   />
                 }
-                label={name}
+                label={username}
               />
             </ListItem>
           ))}
@@ -87,6 +95,7 @@ function FriendsDialog({ onClose, selectedValue, open, all_friends }) {
 const Group = () => {
   const [my_groups, setMy_groups] = useState([]);
   const [added_friends, setAdded_friends] = useState([]);
+  const [added_friends_id, setAdded_friends_id] = useState([]);
   const [user, setUser] = useState(false);
   const [group, setGroup] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -130,6 +139,7 @@ const Group = () => {
   };
 
   const handleCreate = async () => {
+    console.log(added_friends_id) // added_friends_id should be sent as a body to backend
     //[TODO : add create method]
     try {
       const response = await axios.post(backend + "/chat/create", {
@@ -187,9 +197,9 @@ const Group = () => {
             </ListItem>
             <Collapse in={toggle} timeout="auto" unmountOnExit>
               <List>
-                {ADDED_FRIENDS.map((text) => (
-                  <ListItem button key={text}>
-                    <ListItemText primary={text} />
+                {added_friends.map((username, i) => (
+                  <ListItem button key={i}>
+                    <ListItemText primary={username} />
                   </ListItem>
                 ))}
               </List>
@@ -200,9 +210,10 @@ const Group = () => {
             onClick={handleDialogOpen}
           />
           <FriendsDialog
-            selectedValue={selectedValue}
             open={dialogOpen}
             all_friends={all_friends}
+            setAdded_friends={setAdded_friends}
+            setAdded_friends_id={setAdded_friends_id}
             onClose={handleDialogClose}
           />
         </div>
