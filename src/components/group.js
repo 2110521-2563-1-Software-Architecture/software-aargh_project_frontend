@@ -26,7 +26,8 @@ import backend from "../ip"
 
 //mock
 //var ALL_FRIENDS = [{"id":"5fa6f0ca45eb51877885fb1b","username":"focus","name":"focus"},{"id":"5fa6f1b045eb51877885fb1c","username":"focus2","name":"focus"},{"id":"5facd430129c05000ed5b5b7","username":"ajin","name":"jin"},{"id":"5facd785129c05000ed5b5b8","username":"millmill","name":"mill"}] //["mill", "jin", "yin", "nut", "pam", "focus"];
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE4ODE1M30.15j1gNc5BmCbflJt0lTax_GyKIb4jDCC87ZzOxufC9k"
+var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE4ODE1M30.15j1gNc5BmCbflJt0lTax_GyKIb4jDCC87ZzOxufC9k" //[todo : pass token]
+var id = "5facd785129c05000ed5b5b8" //[todo: pass id]
 function FriendsDialog({ 
   onClose, 
   open, 
@@ -114,11 +115,15 @@ const Group = () => {
     const response = await axios.get(
        backend +'/users',config
     ); 
-    //const { success, request } = response.data;
-    //if (success) {
-      setall_friends(response.data) // allfriend list
-      //this.setState({ list: request });
-    //}
+    const all_users = response.data
+    var all_users_but_me = []
+    {all_users.map((user) => {
+      if (user.id != id){
+        all_users_but_me.push(user) 
+      }
+    })}
+    setall_friends(all_users_but_me) // allfriend list
+ 
   }
 
   const handleDialogOpen = () => {
