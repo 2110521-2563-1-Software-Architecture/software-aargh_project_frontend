@@ -19,12 +19,15 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import GroupIcon from "@material-ui/icons/Group";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
-// import openSocket from "socket.io-client";
-// import * as io from "socket.io-client";
-
-// const socket = openSocket("http://localhost:3000");
-
+// mock data for  cid, unread
+const MOCK_DATA = [
+  {cid: 1, my_groups: "Group 1", unread: true},
+  {cid: 2, my_groups: "Group 2", unread: false},
+  {cid: 3, my_groups: "Group 3", unread: true},
+  {cid: 4, my_groups: "Group 4", unread: false}
+]
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -74,14 +77,14 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = ({
   history,
-  available_groups,
-  my_groups,
   onGetMessages,
   user,
+  data = MOCK_DATA
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [click, setClick] = React.useState(true);
+
   const handleOpen = () => {
     setOpen(!open);
   };
@@ -90,8 +93,6 @@ const NavBar = ({
   };
 
   const handleLogout = (user) => {
-    // socket.emit('log out', user)
-    // socket.on('user disconnected', user)
     console.log("disconnected");
   };
 
@@ -115,16 +116,35 @@ const NavBar = ({
           </ListItem>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List>
-              {my_groups.map((text) => (
+
+  {/* TODO: Integrate with backend for get chat name */}
+
+              {/* {my_groups.map((text) => ( */}
+              {data.map((item) => (
                 <ListItem
                   button
-                  key={text}
+                  key={item.my_groups}
                   className={classes.nested}
-                  onClick={(e) => {
-                    onGetMessages(text);
-                  }}
+                  // onClick={(e) => {
+                  //   onGetMessages(text);
+                  // }}
                 >
-                  <ListItemText primary={text} />
+                  <ListItemText primary={item.my_groups} />
+                  {item.unread && (
+                    <ListItemSecondaryAction edge="end">
+                      <div
+                          style={{
+                            display: 'flex',
+                            alignSelf: 'center',
+                            marginRight: 7,
+                            borderRadius: '100%',
+                            backgroundColor: '#FF8258',
+                            height: '10px',
+                            width: '10px',
+                          }}
+                        />
+                    </ListItemSecondaryAction>
+                  )}
                 </ListItem>
               ))}
             </List>

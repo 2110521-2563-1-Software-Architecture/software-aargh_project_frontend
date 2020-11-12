@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./../style/join.css";
 import logo from "./../asset/logo.png";
 import { Button, TextField } from "@material-ui/core";
+import {MyLink} from "../components/grayBox"
 
 import axios from "axios";
 import backend from "../ip";
@@ -32,10 +33,6 @@ class Join extends React.Component {
     // }
   };
 
-  onClickRegister() {
-    console.log(this.state.username);
-  }
-
   render() {
     const { username, password, error } = this.state;
     return (
@@ -58,27 +55,21 @@ class Join extends React.Component {
             floatingLabelText="Password"
             type="password"
             value={this.state.password}
+            style = {{marginTop:"24px"}}
             onChange={(e) => this.setState({ password: e.target.value })}
           ></TextField>
-          <div className="login-button">
-            <Button
-              color="inherite"
-              onClick={(e) => this.login()}
-            >Log in</Button>
-           </div>
-          <div className="register-button">
-            <p>Don't have an account?</p>
-            <Button style = {{backgroundcolor: "gray"}}
-              component={Link}
-              to={{
-                pathname: "/register",
-                state: { user: this.state.name },
-              }}
-              color="inherite"
-              onClick={(e) => this.onClickRegister()}
-            >
-              Register
-            </Button>
+          <div style = {{display: "flex", alignItems: "center", justifyContent:"center", marginTop:"32px"}}>
+            <div className="containedBtn">
+              <Button
+                color="inherit"
+                fullWidth
+                onClick={(e) => this.login()}
+              >Log in</Button>
+            </div>
+          </div>
+          <div style = {{display: "flex", alignItems: "center",justifyContent:"center", width: 240, marginTop:"24px"}}>
+            <div style = {{fontSize: "12px", color: "#105368", marginRight: "8px"}}> Don't have an account?</div>
+            <MyLink goto={"/register"}> Register </MyLink>
           </div>
         </div>
       </div>

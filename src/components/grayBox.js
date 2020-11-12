@@ -1,6 +1,9 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
 import moment from "moment";
+import { Link } from "@material-ui/core/";
+import { withRouter } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
 
 const UnreadGrayBox = () => {
   return (
@@ -46,4 +49,23 @@ const TimeGrayBox = () => {
     </Paper>
   );
 };
-export { UnreadGrayBox, TimeGrayBox };
+
+const MyLink1 = ({ children, goto, history, style }) => {
+  return (<Link
+    style={{
+      color: "#105368",
+      textDecoration: "underline",
+      fontSize: 12,
+      cursor:"pointer",
+      ...style
+    }}
+    onClick={() => {
+      history.push(goto);
+    }}
+  >
+    {children}
+  </Link>)
+}
+const MyLink = withRouter(MyLink1)
+
+export { UnreadGrayBox, TimeGrayBox, MyLink };

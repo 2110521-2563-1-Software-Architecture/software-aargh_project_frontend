@@ -33,29 +33,12 @@
   text-align: left;
 }
 
-.login-button {
-  color: white;
-  font-weight: bold;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
-}
-
-.register-button {
-  color: #105368;
-  font-size: 12px;
-  text-align: center;
-}
-
-.register-button Button {
+.containedBtn{
+  width: 104px;
+  height: 36px;
   background-color: #105368;
-  font-size: small;
-}
-
-.purple-bg {
-  background-color: mediumpurple;
-}
-
-.yellow-bg {
-  background-color: palegoldenrod;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
 }

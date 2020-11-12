@@ -27,7 +27,7 @@
     height: 36px;
     color: #105368;
     border: 1px solid #105368;
-    border-radius: 10px;
+    border-radius: 5px;
     text-align: center;
     margin-right: 120px;
 }
@@ -37,7 +37,7 @@
     height: 36px;
     background-color: #105368;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     color: white;
     text-align: center;
 }
