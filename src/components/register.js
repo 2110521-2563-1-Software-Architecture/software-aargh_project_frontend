@@ -71,7 +71,7 @@ import backend from "../ip"
 
                 <div className ="row-grid">
 
-                <div style = {{display: "flex", alignContent: "center", justifyContent: "center" ,marginTop: "64px"}}>
+                <div style = {{display: "flex",flex: 1, alignContent: "center", justifyContent: "center" }}>
                     <div className="header">Register</div>
                 </div>
                 
