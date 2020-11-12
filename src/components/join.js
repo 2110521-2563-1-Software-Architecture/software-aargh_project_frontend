@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./../style/join.css";
 import logo from "./../asset/logo.png";
 import { Button, TextField } from "@material-ui/core";
@@ -12,25 +11,20 @@ class Join extends React.Component {
   state = { username: null, password: null, error: "" };
   login = async() => {
     const { username, password } = this.state;
-    // const response = await axios.post(backend + "/login", {
-    //   username,
-    //   password,
-    // });
+    const response = await axios.post(backend + "/login", {
+      username,
+      password,
+    });
 
-    // const { success, message } = response.data;
-    console.log({ username, password })
-
- //TODO: check after POST is connected
-
-    // if (success) {
-    //   console.log(message);
-    //   this.props.history.push({
-    //     pathname: "/group",
-    //     state: { user: this.state.username },
-    //   });
-    // } else {
-    //   this.setState({ error: message });
-    // }
+    if(response?.data?.id){
+      this.props.history.push({
+        pathname: "/group", 
+        state: {data: response.data}
+      });
+    } else {
+      console.log("error")
+      this.setState({ error: "error" });
+    }
   };
 
   render() {

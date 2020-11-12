@@ -39,28 +39,27 @@ import backend from "../ip"
       
         const handleRegister = async () => {
 
-            console.log("success")
     // TODO check after POST is done
-        //   if (validate()) {
-        //     try {
-        //       const response = await axios.post(backend + "/user/register", {
-        //         ...form,
-        //       });
-        //       const { success, message } = response.data;
+          if (validate()) {
+            try {
+              const response = await axios.post(backend + "/user/register", {
+                ...form,
+              });
+              const { success, message } = response.data;
               
-        //       if (success) {
-        //         console.log("success")
-        //         // const user = information[0];
-        //         // handleLogin(user);
-        //         history.push("/");
-        //       } else {
-        //         setErrorMessage(message);
-        //       }
-        //     } catch (e) {
-        //       console.log(e);
-        //       setErrorMessage("Invalid data, please check your input again");
-        //     }
-        //   }
+              if (success) {
+                console.log("success")
+                // const user = information[0];
+                // handleLogin(user);
+                history.push("/");
+              } else {
+                setErrorMessage(message);
+              }
+            } catch (e) {
+              console.log(e);
+              setErrorMessage("Invalid data, please check your input again");
+            }
+          }
         };    
 
         return (

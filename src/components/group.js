@@ -93,7 +93,7 @@ function FriendsDialog({
   );
 }
 
-const Group = () => {
+const Group = ( info ) => {
   const [my_groups, setMy_groups] = useState([]);
   const [added_friends, setAdded_friends] = useState([]);
   const [added_friends_id, setAdded_friends_id] = useState([]);
@@ -175,7 +175,7 @@ const Group = () => {
       <Drawer
         my_groups={my_groups}
         onGetMessages={onGetMessages}
-        user={user}
+        user={info.location.state.data.name}
       ></Drawer>
       <div className="group-panel">
         <div className="group-header">CREATE NEW GROUP</div>
