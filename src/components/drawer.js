@@ -150,6 +150,7 @@ const NavBar = ({
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={open} timeout="auto" unmountOnExit>
+            {/* {console.log({my_groups})} */}
             <List>
               {my_groups.map((group, index) => (
                 <ListItem
