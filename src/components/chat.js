@@ -155,11 +155,7 @@ const Chat = ({ history, handleLogout,db }) => {
       {messages.map((message) => {
         users_id.push(message.uid)
       })}
-      this.setState({
-        messages: messages,
-        users: users_id
-      });
-      console.log(this.state.messages)
+      setMessages(messages)
     } else {
       console.log("NO MESSAGE")
       setMessages([])

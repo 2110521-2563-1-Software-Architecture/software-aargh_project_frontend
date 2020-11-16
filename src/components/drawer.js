@@ -113,10 +113,6 @@ const NavBar = ({
     setOpen(!open);
   };
 
-  const handleClick = () => {
-    setClick(!click);
-  };
-
   const onGetAllMyGroups = () => {
     var app = db.database().ref('/chat/'+uid);
     app.on('value', snapshot => {
@@ -154,7 +150,12 @@ const NavBar = ({
                   button
                   key={index}
                   className={classes.nested}
-                  onClick={() => {
+                  onClick={async () => {
+                    let dbRef = db.database().ref('chat/' + uid + '/' + group.key)
+                      await dbRef.set({
+                        cid: group.key,
+                        read: false
+                      })
                     history.push({
                       pathname: "/chat", 
                       state: { 
