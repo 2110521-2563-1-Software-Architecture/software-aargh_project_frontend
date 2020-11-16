@@ -44,6 +44,22 @@ const Chat = ({ history, handleLogout }) => {
   // ask yin for this
   const [refInput, setRefInput] = useState(null);
 
+
+  //[TODO] - recheck after get real group id
+  const getAllUsers = async () => { 
+    let config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      } 
+    }
+    const response = await axios.post(
+       backend +'/chat/detail',{id: location.state.group_id},config
+    ); 
+    console.log('ALL USERS')
+    console.log(response.data)
+    return response.data
+  }
+
   const onSendMessage = async () => {
     const response = await axios.post(backend + "/message/send", {
       cid: location.state.group_id,
@@ -136,6 +152,7 @@ const Chat = ({ history, handleLogout }) => {
 
   const onGetMessages = async () => {
     console.log("get realtime message");
+    getAllUsers();
     setMessages(MESSAGE);
   };
 
