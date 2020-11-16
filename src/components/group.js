@@ -24,8 +24,6 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import axios from "axios";
 import backend from "../ip"
 
-//mock
-//var ALL_FRIENDS = [{"id":"5fa6f0ca45eb51877885fb1b","username":"focus","name":"focus"},{"id":"5fa6f1b045eb51877885fb1c","username":"focus2","name":"focus"},{"id":"5facd430129c05000ed5b5b7","username":"ajin","name":"jin"},{"id":"5facd785129c05000ed5b5b8","username":"millmill","name":"mill"}] //["mill", "jin", "yin", "nut", "pam", "focus"];
 function FriendsDialog({ 
   onClose, 
   open, 
@@ -91,7 +89,7 @@ function FriendsDialog({
   );
 }
 
-const Group = ({ history, handleLogout }) => {
+const Group = ({ history, handleLogout,db }) => {
   const location = useLocation();
   const token = JSON.parse(localStorage.getItem('token'));
   const uid = JSON.parse(localStorage.getItem('uid'));
@@ -171,18 +169,10 @@ const Group = ({ history, handleLogout }) => {
       <Drawer
         user={location.state.username}
         handleLogout={(token) => handleLogout(token)}
+        db={db}
       ></Drawer>
       <div className="group-panel">
         <div className="group-header">CREATE NEW GROUP</div>
-        <div className="group-content">
-          <o1 style={{ marginRight: "20px" }}>Group Name:</o1>
-          <TextField
-            style={{ marginRight: "20px" }}
-            placeholder="Group Name"
-            value={group_name}
-            onChange={(e) => setGroup_name(e.target.value)}
-          ></TextField>
-        </div>
         <div className="friend-content">
           <List>
             <ListItem button onClick={handleToggle}>

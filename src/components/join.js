@@ -19,14 +19,14 @@ const Join = ({ history, handleLogin }) => {
         password,
       });
 
-      if(response?.data?.id){
+      if(response?.data){
         console.log("success")
         handleLogin(response.data.token);
         localStorage.setItem('uid', JSON.stringify(response.data.id));
         history.push({
           pathname: "/group", 
           state: { 
-            username: username
+            username: username,
           }
         });
       } else {

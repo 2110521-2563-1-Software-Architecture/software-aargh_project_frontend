@@ -8,24 +8,12 @@ import { Button, TextField } from "@material-ui/core";
 
 import axios from "axios";
 import backend from "../ip";
-import firebase from 'firebase';
 import _ from 'lodash';
 
 // MOCK DATA
 const MESSAGE = [{ user: 'me', message: 'Hello' }, { user: 'me', message: 'I\'m me' }];
 
-const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  databaseURL: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
-};
-firebase.initializeApp(firebaseConfig);
-
-const Chat = ({ history, handleLogout }) => {
+const Chat = ({ history, handleLogout,db }) => {
   const location = useLocation();
   const token = JSON.parse(localStorage.getItem('token'));
   const [currentMessage, setCurrentMessage] = useState("");
@@ -33,13 +21,6 @@ const Chat = ({ history, handleLogout }) => {
   const [currentPhotoFile, setCurrentPhotoFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
-
-  // let db = firebase
-  // let app = db.database().ref('message/'+location.state.group_id);
-  // app.on('value', snapshot => {
-  //     getData(snapshot.val());
-  //   });
-  // };
 
   // ask yin for this
   const [refInput, setRefInput] = useState(null);
@@ -100,7 +81,7 @@ const Chat = ({ history, handleLogout }) => {
   const uploadPhoto = () => {
     if (currentPhotoFile) {
 
-      const uploadTask = firebase
+      const uploadTask = db
         .storage().ref(currentPhotoFile.name)
         .put(currentPhotoFile)
 
@@ -151,6 +132,10 @@ const Chat = ({ history, handleLogout }) => {
 
   const onGetMessages = async () => {
     console.log("get realtime message");
+    var app = db.database().ref('message/'+location.state.group_id);
+    app.on('value', snapshot => {
+        getData(snapshot.val());
+      });
     getAllUsers();
     setMessages(MESSAGE);
   };
@@ -164,16 +149,21 @@ const Chat = ({ history, handleLogout }) => {
                       cloned.key = messageKey;
                       return cloned;
                     }).value();
-    //console.log(messages)
-    var users_id = []
-    {messages.map((message) => {
-      users_id.push(message.uid)
-    })}
-    this.setState({
-      messages: messages,
-      users: users_id
-    });
-    console.log(this.state.messages)
+    if (messages.length!=0){
+      console.log({messages})
+      var users_id = []
+      {messages.map((message) => {
+        users_id.push(message.uid)
+      })}
+      this.setState({
+        messages: messages,
+        users: users_id
+      });
+      console.log(this.state.messages)
+    } else {
+      console.log("NO MESSAGE")
+      setMessages([])
+    }
     //console.log(this.state.users)
   };
 
@@ -186,6 +176,7 @@ const Chat = ({ history, handleLogout }) => {
       <Drawer
         user={location.state.username}
         handleLogout={(token) => handleLogout(token)}
+        db={db}
       ></Drawer>
       <div className="chat-panel">
         <div

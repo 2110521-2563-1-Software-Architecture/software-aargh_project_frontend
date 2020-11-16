@@ -11,8 +11,24 @@ import history from "./logic/history";
 import "./style/index.css";
 import Register from "./components/register";
 
+import firebase from 'firebase';
+import _ from 'lodash';
+
 function App() {
   const [token, setToken] = React.useState(null);
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBISweht8fYIVVhM3WqwfZQ_5fDZW-SGVU",
+    authDomain: "web-test-6b88c.firebaseapp.com",
+    databaseURL: "https://web-test-6b88c.firebaseio.com",
+    projectId: "web-test-6b88c",
+    storageBucket: "web-test-6b88c.appspot.com",
+    messagingSenderId: "233711291286",
+    appId: "1:233711291286:web:3df48501376a357e5f2bb7"
+  };
+  if (!firebase.apps.length){
+    firebase.initializeApp(firebaseConfig);
+  }
 
   const handleSetToken = (data) => {
 		localStorage.setItem('token', JSON.stringify(data));
@@ -31,10 +47,10 @@ function App() {
           <Join handleLogin={(token) => handleSetToken(token)}/>
         </Route>
         <Route path="/chat">
-          <Chat handleLogout={(token) => handleLogout(token)}/>
+          <Chat db={firebase} handleLogout={(token) => handleLogout(token)}/>
         </Route>
         <Route path="/group">
-          <Group handleLogout={(token) => handleLogout(token)}/>
+          <Group db={firebase} handleLogout={(token) => handleLogout(token)}/>
         </Route>
         <Route path="/register" exact>
           <Register />

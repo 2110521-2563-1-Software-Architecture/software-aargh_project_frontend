@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router-dom";
+import { useLocation, withRouter } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
@@ -21,13 +21,8 @@ import GroupIcon from "@material-ui/icons/Group";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
-// mock data for  cid, unread
-const MOCK_DATA = [
-  {cid: 1, name: "Group 1", unread: true},
-  {cid: 2, name: "Group 2", unread: false},
-  {cid: 3, name: "Group 3", unread: true},
-  {cid: 4, name: "Group 4", unread: false}
-]
+import _ from 'lodash';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -79,14 +74,40 @@ const NavBar = ({
   history,
   user,
   handleLogout,
+  db
 }) => {
   const classes = useStyles();
+  const location = useLocation();
   const token = JSON.parse(localStorage.getItem('token'));
+  const uid = JSON.parse(localStorage.getItem('uid'));
   const [open, setOpen] = useState(true);
   const [click, setClick] = useState(true);
 
-  // for get all chat from realtime database
+  // for getting all chat from realtime database
   const [my_groups, setMy_groups] = useState([]);
+
+  const getAllChats = (values) => {
+    let chatsVal = values;
+    let chats = _(chatsVal)
+                    .keys()
+                    .map(chatKey => {
+                      let cloned = _.clone(chatsVal[chatKey]);
+                      cloned.key = chatKey;
+                      return cloned;
+                    }).value();
+    if (chats.length!=0){
+      console.log({chats})
+      var all_my_chats = []
+      {chats.map((chat) => {
+          all_my_chats.push(chat)
+      })}
+      setMy_groups(all_my_chats)
+    } else {
+      console.log("NO GROUP")
+      setMy_groups([])
+    }
+    //console.log(this.state.users)
+  };
 
   const handleOpen = () => {
     setOpen(!open);
@@ -97,7 +118,10 @@ const NavBar = ({
   };
 
   const onGetAllMyGroups = () => {
-    setMy_groups(MOCK_DATA);
+    var app = db.database().ref('/chat/'+uid);
+    app.on('value', snapshot => {
+        getAllChats(snapshot.val());
+      });
   };
 
   useEffect(() => {
@@ -123,28 +147,26 @@ const NavBar = ({
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={open} timeout="auto" unmountOnExit>
+            {console.log({my_groups})}
             <List>
-
-  {/* TODO: Integrate with backend for get chat name */}
-
-              {my_groups.map((group) => (
+              {my_groups.map((group, index) => (
                 <ListItem
                   button
-                  key={group.name}
+                  key={index}
                   className={classes.nested}
                   onClick={() => {
                     history.push({
                       pathname: "/chat", 
                       state: { 
                         username: user, 
-                        group_id: group.cid,  // should be selected group id
-                        group_name: group.name   // should be selected group name
+                        group_id: group.key,  // should be selected group id
+                        group_name: group.key   // should be selected group name
                       }
                     })
                   }}
                 >
-                  <ListItemText primary={group.name} />
-                  {group.unread && (
+                  <ListItemText primary={group.key} />
+                  {group.read && (
                     <ListItemSecondaryAction edge="end">
                       <div
                           style={{

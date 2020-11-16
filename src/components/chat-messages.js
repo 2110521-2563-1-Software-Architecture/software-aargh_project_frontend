@@ -5,20 +5,6 @@ import axios from "axios";
 import backend from "../ip"
 import { PhotoSizeSelectLargeSharp } from "@material-ui/icons";
 
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE4ODE1M30.15j1gNc5BmCbflJt0lTax_GyKIb4jDCC87ZzOxufC9k" //[todo : pass token]
-
-// const getAllUsers = async (id) => { 
-//   let config = {
-//     headers: {
-//       'Authorization': `Bearer ${token}`
-//     } 
-//   }
-//   const response = await axios.post(
-//      backend +'/chat/detail',{id: id},config
-//   ); 
-//   return response.data
-// }
-
 class ChatMessages extends React.Component {
   state = {
     messages: [],
