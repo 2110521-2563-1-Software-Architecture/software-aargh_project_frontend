@@ -25,7 +25,7 @@ function App() {
     storageBucket: "",
     messagingSenderId: "",
     appId: ""
-  };  
+    };
   if (!firebase.apps.length){
     firebase.initializeApp(firebaseConfig);
   }
