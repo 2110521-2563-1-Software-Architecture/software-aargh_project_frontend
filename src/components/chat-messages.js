@@ -22,54 +22,47 @@ class ChatMessages extends React.Component {
       <div className="container">
         {Array.isArray(this.props.messages) &&
           this.props.messages.map((message) => (
-            <div
-              className={
-                message.user === this.props.user
-                  ? "my-message-container order"
-                  : "other-message-container order"
-              }
-            >
-              <div style={{ fontSize: "12px", marginBottom: "3px" }}>
-                {message.user === this.props.user ? null : message.user}
+              <div
+                className={
+                  // TODO: message.user === this.props.user
+                  message.type === "TEXT" && message.uid === "5facd430129c05000ed5b5b7"
+                    ? "my-message-container order"
+                    : "other-message-container order"
+                }
+              >
+                <div style={{ fontSize: "12px", marginBottom: "3px" }}>
+                  {message.user === this.props.user ? null : message.user}
+                </div>
+                {/* here */}
+                <div>
+                  {message.type === "TEXT" ? (
+                    <div style={{ display: "flex", flexDirection: "row" }}>
+                      <div
+                        className={
+                          message.user === this.props.user
+                            ? "my-message"
+                            : "other-message"
+                        }
+                      >
+                        {message.content}
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div
+                        className={
+                          message.user === this.props.user
+                            ? "my-message"
+                            : "other-message"
+                        }
+                      >
+                        <img src={message.content}></img>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* till here */}
               </div>
-              <div>
-                {message.user === this.props.user ? (
-                  <div style={{ display: "flex", flexDirection: "row" }}>
-                    <div className="time">
-                      {moment(message.time).format("h:mm a")}
-                      <br />
-                      {moment(message.time).format("L")}
-                    </div>
-                    <div
-                      className={
-                        message.user === this.props.user
-                          ? "my-message"
-                          : "other-message"
-                      }
-                    >
-                      {message.content}
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <div
-                      className={
-                        message.user === this.props.user
-                          ? "my-message"
-                          : "other-message"
-                      }
-                    >
-                      {message.content}
-                    </div>
-                    {/* <div className="time">
-                      {moment(message.time).format("h:mm a")}
-                      <br />
-                      {moment(message.time).format("L")}
-                    </div> */}
-                  </div>
-                )}
-              </div>
-            </div>
           ))}
       </div>
     );

@@ -18,12 +18,9 @@ const Chat = ({ history, handleLogout,db }) => {
   const token = JSON.parse(localStorage.getItem('token'));
   const [currentMessage, setCurrentMessage] = useState("");
   const [image_url, setImage_url] = useState("");
-  const [currentPhotoFile, setCurrentPhotoFile] = useState(null);
+  const [currentPhotoFile, setCurrentPhotoFile] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
-
-  // ask yin for this
-  const [refInput, setRefInput] = useState(null);
 
   //[TODO] - recheck after get real group id
   const getAllUsers = async () => { 
@@ -57,28 +54,10 @@ const Chat = ({ history, handleLogout,db }) => {
     } else {
       console.log("ERROR");
     }
-
   };
 
-  const onChoosePhoto = event => {
-    if (event.target.files && event.target.files[0]) {
-        setIsLoading(true);
-        setCurrentPhotoFile(event.target.files[0]);
-        // Check this file is an image?
-        const prefixFiletype = event.target.files[0].type.toString();
-        if (prefixFiletype.indexOf('image/') === 0) {
-            uploadPhoto();
-            // console.log(this.currentPhotoFile.name)
-        } else {
-            setIsLoading(false);
-            console.log('This file is not an image');
-        }
-    } else {
-      setIsLoading(false);
-    }
-  }
-
   const uploadPhoto = () => {
+    console.log("from upload",currentPhotoFile)
     if (currentPhotoFile) {
 
       const uploadTask = db
@@ -106,21 +85,49 @@ const Chat = ({ history, handleLogout,db }) => {
     }
   }
 
-  const onSendImage = async () => {
-    const response = await axios.post(backend + "/message/send", {
-      cid: location.state.group_id,
-      content: image_url,
-      type: "IMAGE"
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    if (response.data) {
-      console.log(response.data);
+  const onChoosePhoto = event => {
+    if (event.target.files && event.target.files[0]) {
+        //console.log("event:",event.target.files[0])
+        setIsLoading(true);
+        setCurrentPhotoFile(event.target.files[0]);
+        //[...picture, e.target.files[0]]
+        // Check this file is an image?
+        const prefixFiletype = event.target.files[0].type.toString();
+        if (prefixFiletype.indexOf('image/') === 0) {
+            uploadPhoto();
+            // console.log(this.currentPhotoFile.name)
+        } else {
+            setIsLoading(false);
+            console.log('This file is not an image');
+        }
     } else {
-      console.log("error");
+      setIsLoading(false);
+    }
+  }
+
+  const onSendImage = async () => {
+    console.log("onSent");
+    console.log(location.state.group_id)
+    console.log({image_url, token})
+    try {
+      const response = await axios.post(backend + "/message/send", {
+        cid: location.state.group_id,
+        content: image_url,
+        type: "IMAGE"
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      console.log({response});
+      if (response.data) {
+        console.log(response.data);
+        console.log("sent image");
+      } else {
+        console.log("error");
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -137,25 +144,27 @@ const Chat = ({ history, handleLogout,db }) => {
         getData(snapshot.val());
       });
     getAllUsers();
-    setMessages(MESSAGE);
+    //setMessages(MESSAGE);
   };
 
   const getData = (values) => {
     let messagesVal = values;
-    let messages = _(messagesVal)
+    let msg = _(messagesVal)
                     .keys()
                     .map(messageKey => {
                       let cloned = _.clone(messagesVal[messageKey]);
                       cloned.key = messageKey;
                       return cloned;
                     }).value();
-    if (messages.length!=0){
-      console.log({messages})
+    if (msg.length!=0){
+      console.log("msg!=0:",{msg})
       var users_id = []
-      {messages.map((message) => {
-        users_id.push(message.uid)
+      var all_msg = []
+      {msg.map((m) => {
+        all_msg.push(m)
+        users_id.push(m.uid)
       })}
-      setMessages(messages)
+      setMessages(all_msg)
     } else {
       console.log("NO MESSAGE")
       setMessages([])
@@ -166,6 +175,10 @@ const Chat = ({ history, handleLogout,db }) => {
   useEffect(() => {
     onGetMessages();
   }, []);
+
+  useEffect(() => {
+    uploadPhoto();
+  }, [currentPhotoFile]);
 
   return (
     <div className="chat">
@@ -209,12 +222,14 @@ const Chat = ({ history, handleLogout,db }) => {
           <Button onClick={() => onSendMessage()}>Send</Button>
         </div>
         {/* what nrefInput for? */}
-        {/* <input ref={el => { refInput = el }}
+        <input 
+          //ref={el => { refInput = el }}
           accept="image/*"
           className="viewInputGallery"
           type="file"
-          onChange={() => onChoosePhoto()}
-        /> */}
+          //onChange={() => onChoosePhoto()}
+          onChange = {onChoosePhoto}
+        />
       </div>
     </div>
   );
