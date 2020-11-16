@@ -1,5 +1,5 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, withRouter } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
@@ -21,13 +21,8 @@ import GroupIcon from "@material-ui/icons/Group";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
-// mock data for  cid, unread
-const MOCK_DATA = [
-  {cid: 1, my_groups: "Group 1", unread: true},
-  {cid: 2, my_groups: "Group 2", unread: false},
-  {cid: 3, my_groups: "Group 3", unread: true},
-  {cid: 4, my_groups: "Group 4", unread: false}
-]
+import _ from 'lodash';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -77,24 +72,57 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = ({
   history,
-  onGetMessages,
   user,
-  data = MOCK_DATA
+  handleLogout,
+  db
 }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const [click, setClick] = React.useState(true);
+  const location = useLocation();
+  const token = JSON.parse(localStorage.getItem('token'));
+  const uid = JSON.parse(localStorage.getItem('uid'));
+  const [open, setOpen] = useState(true);
+  const [click, setClick] = useState(true);
+
+  // for getting all chat from realtime database
+  const [my_groups, setMy_groups] = useState([]);
+
+  const getAllChats = (values) => {
+    let chatsVal = values;
+    let chats = _(chatsVal)
+                    .keys()
+                    .map(chatKey => {
+                      let cloned = _.clone(chatsVal[chatKey]);
+                      cloned.key = chatKey;
+                      return cloned;
+                    }).value();
+    if (chats.length!=0){
+      console.log({chats})
+      var all_my_chats = []
+      {chats.map((chat) => {
+          all_my_chats.push(chat)
+      })}
+      setMy_groups(all_my_chats)
+    } else {
+      console.log("NO GROUP")
+      setMy_groups([])
+    }
+    //console.log(this.state.users)
+  };
 
   const handleOpen = () => {
     setOpen(!open);
   };
-  const handleClick = () => {
-    setClick(!click);
+
+  const onGetAllMyGroups = () => {
+    var app = db.database().ref('/chat/'+uid);
+    app.on('value', snapshot => {
+        getAllChats(snapshot.val());
+      });
   };
 
-  const handleLogout = (user) => {
-    console.log("disconnected");
-  };
+  useEffect(() => {
+    onGetAllMyGroups();
+  }, []);
 
   const sideList = (
     <div className={classes.root}>
@@ -115,22 +143,31 @@ const NavBar = ({
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={open} timeout="auto" unmountOnExit>
+            {/* {console.log({my_groups})} */}
             <List>
-
-  {/* TODO: Integrate with backend for get chat name */}
-
-              {/* {my_groups.map((text) => ( */}
-              {data.map((item) => (
+              {my_groups.map((group, index) => (
                 <ListItem
                   button
-                  key={item.my_groups}
+                  key={index}
                   className={classes.nested}
-                  // onClick={(e) => {
-                  //   onGetMessages(text);
-                  // }}
+                  onClick={async () => {
+                    let dbRef = db.database().ref('chat/' + uid + '/' + group.key)
+                      await dbRef.set({
+                        cid: group.key,
+                        read: false
+                      })
+                    history.push({
+                      pathname: "/chat", 
+                      state: { 
+                        username: user, 
+                        group_id: group.key,  // should be selected group id
+                        group_name: group.key   // should be selected group name
+                      }
+                    })
+                  }}
                 >
-                  <ListItemText primary={item.my_groups} />
-                  {item.unread && (
+                  <ListItemText primary={group.key} />
+                  {group.read && (
                     <ListItemSecondaryAction edge="end">
                       <div
                           style={{
@@ -159,6 +196,14 @@ const NavBar = ({
               alignItems: "center",
               minWidth: "100%",
               margin: "10px 0 10px 0",
+            }}
+            onClick={() => {
+              history.push({
+                pathname: "/group", 
+                state: { 
+                  username: user
+                }
+              })
             }}
           >
             <AddCircleRoundedIcon
@@ -190,7 +235,7 @@ const NavBar = ({
           }}
           onClick={() => {
             history.push("/");
-            handleLogout(user);
+            handleLogout(token);
           }}
         >
           <Button style={{ color: "white" }}>Log out</Button>
