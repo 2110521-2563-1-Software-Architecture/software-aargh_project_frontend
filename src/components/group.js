@@ -56,7 +56,6 @@ function FriendsDialog({
       newChecked.splice(currentIndex, 1);
       id_list.splice(currentIndex, 1);
     }
-    console.log(newChecked)
     setChecked(newChecked);
     setSelected_id(id_list);
   };
@@ -99,7 +98,6 @@ const Group = ({ history, handleLogout,db }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [all_friends,setall_friends] = useState([]);
-  const [created_group_id, setCreated_group_id] = useState("");
 
   const getAllUsersButMe = async () => { 
     const response = await axios.get(backend +'/users',{
@@ -147,13 +145,12 @@ const Group = ({ history, handleLogout,db }) => {
 
       if (response?.data?.id) {
         console.log("success");
-        setCreated_group_id(response.data.id);
         history.push({
           pathname: "/chat", 
           state: { 
             username: location.state.username, 
-            group_id: created_group_id,
-            group_name: group_name
+            group_id: response.data.id,
+            group_name: response.data.id
           }
         });
       } else {

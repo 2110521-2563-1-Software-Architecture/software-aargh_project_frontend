@@ -24,7 +24,7 @@ function App() {
     projectId: "",
     storageBucket: "",
     messagingSenderId: "",
-    appId: ""
+    appId: ""  
     };
   if (!firebase.apps.length){
     firebase.initializeApp(firebaseConfig);
