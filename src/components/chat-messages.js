@@ -17,6 +17,20 @@ class ChatMessages extends React.Component {
     console.log(this.props.messages, this.props.user);
   }
 
+  uidToUsername = (uid) => {
+    var username = ""
+    this.state.all_users.map((user) => {
+      if (user.id == uid) {
+        username = user.username
+      }
+    })
+    if (username != ""){
+      return username
+    } else {
+      return "UNKNOWN USER"
+    }
+  }
+
   render() {
     return (
       <div className="container">

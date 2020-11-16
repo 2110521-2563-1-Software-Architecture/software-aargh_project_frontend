@@ -21,17 +21,21 @@ const Chat = ({ history, handleLogout,db }) => {
   const [currentPhotoFile, setCurrentPhotoFile] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [all_users,setAllUsers] = useState([]);
 
-  //[TODO] - recheck after get real group id
   const getAllUsers = async () => { 
     let config = {
       headers: {
         'Authorization': `Bearer ${token}`
       } 
     }
+    console.log('GID',location.state.group_id)
+
     const response = await axios.post(
        backend +'/chat/detail',{id: location.state.group_id},config
     ); 
+    
+    console.log('response')
     console.log('ALL USERS', response.data)
     return response.data
   }
@@ -134,7 +138,8 @@ const Chat = ({ history, handleLogout,db }) => {
     app.on('value', snapshot => {
         getData(snapshot.val());
       });
-    getAllUsers();
+    var  all_users = await getAllUsers();
+    setAllUsers(all_users)
   };
 
   const getData = (values) => {
@@ -197,6 +202,7 @@ const Chat = ({ history, handleLogout,db }) => {
           <ChatMessages
             messages={messages}
             user={location.state.username}
+            all_users = {all_users}
           ></ChatMessages>
         </div>
         <div className="message-box">
