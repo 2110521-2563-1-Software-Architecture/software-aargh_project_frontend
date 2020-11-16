@@ -9,6 +9,7 @@ import axios from "axios";
 import backend from "../ip";
 
 import firebase from 'firebase';
+import _ from 'lodash';
 
 // MOCK DATA
 const CID = "5facdb7e129c05000ed5b5b9";
@@ -32,17 +33,26 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 class Chat extends React.Component {
-  state = {
+  constructor(props){
+    super(props);
+  this.state = {
     my_groups: [],
     cid: CID,
     user: USER,
     group: GROUP,
     currentMessage: "",
-    messages: MESSAGE,
+    messages: [],
     image_url: "",
     currentPhotoFile: null,
     isLoading: false,
-    token: TOKEN
+    token: TOKEN,
+    users: []
+  }
+  let db = firebase
+  let app = db.database().ref('message/'+this.state.cid);
+    app.on('value', snapshot => {
+      this.getData(snapshot.val());
+    });
   }
 
   componentDidMount() {
@@ -171,13 +181,35 @@ uploadPhoto = () => {
     this.setState({ group: groupName });
   };
 
+  getData(values){
+    let messagesVal = values;
+    let messages = _(messagesVal)
+                    .keys()
+                    .map(messageKey => {
+                      let cloned = _.clone(messagesVal[messageKey]);
+                      cloned.key = messageKey;
+                      return cloned;
+                    }).value();
+    //console.log(messages)
+    var users_id = []
+    {messages.map((message) => {
+      users_id.push(message.uid)
+    })}
+    this.setState({
+      messages: messages,
+      users: users_id
+    });
+    console.log(this.state.messages)
+    //console.log(this.state.users)
+  }
+
   render() {
     return (
       <div className="chat">
         <Drawer
-          my_groups={this.state.my_groups}
-          onGetMessages={this.onGetMessages}
-          user={this.state.user}
+          // my_groups={this.state.my_groups}
+          // onGetMessages={this.onGetMessages}
+          // user={this.state.user}
         ></Drawer>
         <div className="chat-panel">
           <div
@@ -200,7 +232,7 @@ uploadPhoto = () => {
               // messages={this.state.messages[this.state.group]}
               // user={this.props.location.state.user}
               messages={this.state.messages}
-              user={this.state.user}
+              user={this.state.user}q
               group={this.state.group}
             ></ChatMessages>
           </div>

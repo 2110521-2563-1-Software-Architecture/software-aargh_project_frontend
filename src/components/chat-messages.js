@@ -43,7 +43,7 @@ class ChatMessages extends React.Component {
                           : "other-message"
                       }
                     >
-                      {message.message}
+                      {message.content}
                     </div>
                   </div>
                 ) : (
@@ -55,13 +55,13 @@ class ChatMessages extends React.Component {
                           : "other-message"
                       }
                     >
-                      {message.message}
+                      {message.content}
                     </div>
-                    <div className="time">
+                    {/* <div className="time">
                       {moment(message.time).format("h:mm a")}
                       <br />
                       {moment(message.time).format("L")}
-                    </div>
+                    </div> */}
                   </div>
                 )}
               </div>
