@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -23,10 +23,10 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 // mock data for  cid, unread
 const MOCK_DATA = [
-  {cid: 1, my_groups: "Group 1", unread: true},
-  {cid: 2, my_groups: "Group 2", unread: false},
-  {cid: 3, my_groups: "Group 3", unread: true},
-  {cid: 4, my_groups: "Group 4", unread: false}
+  {cid: 1, name: "Group 1", unread: true},
+  {cid: 2, name: "Group 2", unread: false},
+  {cid: 3, name: "Group 3", unread: true},
+  {cid: 4, name: "Group 4", unread: false}
 ]
 const drawerWidth = 240;
 
@@ -77,24 +77,32 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = ({
   history,
-  onGetMessages,
   user,
-  data = MOCK_DATA
+  handleLogout,
 }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const [click, setClick] = React.useState(true);
+  const token = JSON.parse(localStorage.getItem('token'));
+  const [open, setOpen] = useState(true);
+  const [click, setClick] = useState(true);
+
+  // for get all chat from realtime database
+  const [my_groups, setMy_groups] = useState([]);
 
   const handleOpen = () => {
     setOpen(!open);
   };
+
   const handleClick = () => {
     setClick(!click);
   };
 
-  const handleLogout = (user) => {
-    console.log("disconnected");
+  const onGetAllMyGroups = () => {
+    setMy_groups(MOCK_DATA);
   };
+
+  useEffect(() => {
+    onGetAllMyGroups();
+  }, []);
 
   const sideList = (
     <div className={classes.root}>
@@ -119,18 +127,24 @@ const NavBar = ({
 
   {/* TODO: Integrate with backend for get chat name */}
 
-              {/* {my_groups.map((text) => ( */}
-              {data.map((item) => (
+              {my_groups.map((group) => (
                 <ListItem
                   button
-                  key={item.my_groups}
+                  key={group.name}
                   className={classes.nested}
-                  // onClick={(e) => {
-                  //   onGetMessages(text);
-                  // }}
+                  onClick={() => {
+                    history.push({
+                      pathname: "/chat", 
+                      state: { 
+                        username: user, 
+                        group_id: group.cid,  // should be selected group id
+                        group_name: group.name   // should be selected group name
+                      }
+                    })
+                  }}
                 >
-                  <ListItemText primary={item.my_groups} />
-                  {item.unread && (
+                  <ListItemText primary={group.name} />
+                  {group.unread && (
                     <ListItemSecondaryAction edge="end">
                       <div
                           style={{
@@ -159,6 +173,14 @@ const NavBar = ({
               alignItems: "center",
               minWidth: "100%",
               margin: "10px 0 10px 0",
+            }}
+            onClick={() => {
+              history.push({
+                pathname: "/group", 
+                state: { 
+                  username: user
+                }
+              })
             }}
           >
             <AddCircleRoundedIcon
@@ -190,7 +212,7 @@ const NavBar = ({
           }}
           onClick={() => {
             history.push("/");
-            handleLogout(user);
+            handleLogout(token);
           }}
         >
           <Button style={{ color: "white" }}>Log out</Button>

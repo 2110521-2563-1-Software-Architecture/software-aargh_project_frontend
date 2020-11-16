@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./../style/group.css";
 import Drawer from "./drawer";
-import { Link } from "react-router-dom";
+import { useLocation, Link, withRouter } from "react-router-dom";
 
 import { Button, TextField } from "@material-ui/core";
 import List from "@material-ui/core/List";
@@ -26,8 +26,6 @@ import backend from "../ip"
 
 //mock
 //var ALL_FRIENDS = [{"id":"5fa6f0ca45eb51877885fb1b","username":"focus","name":"focus"},{"id":"5fa6f1b045eb51877885fb1c","username":"focus2","name":"focus"},{"id":"5facd430129c05000ed5b5b7","username":"ajin","name":"jin"},{"id":"5facd785129c05000ed5b5b8","username":"millmill","name":"mill"}] //["mill", "jin", "yin", "nut", "pam", "focus"];
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYWNkNzg1MTI5YzA1MDAwZWQ1YjViOCIsImlhdCI6MTYwNTE4ODE1M30.15j1gNc5BmCbflJt0lTax_GyKIb4jDCC87ZzOxufC9k" //[todo : pass token]
-var id = "5facd785129c05000ed5b5b8" //[todo: pass id]
 function FriendsDialog({ 
   onClose, 
   open, 
@@ -93,31 +91,29 @@ function FriendsDialog({
   );
 }
 
-const Group = ( info ) => {
-  const [my_groups, setMy_groups] = useState([]);
+const Group = ({ history, handleLogout }) => {
+  const location = useLocation();
+  const token = JSON.parse(localStorage.getItem('token'));
+  const uid = JSON.parse(localStorage.getItem('uid'));
   const [added_friends, setAdded_friends] = useState([]);
   const [added_friends_id, setAdded_friends_id] = useState([]);
-  const [user, setUser] = useState(false);
-  const [group, setGroup] = useState("");
+  const [group_name, setGroup_name] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState([]);
   const [toggle, setToggle] = useState(false);
   const [all_friends,setall_friends] = useState([]);
-  const [added_users, setAdded_users] = useState([]);
+  const [created_group_id, setCreated_group_id] = useState("");
 
   const getAllUsersButMe = async () => { 
-    let config = {
+    const response = await axios.get(backend +'/users',{
       headers: {
         'Authorization': `Bearer ${token}`
-      } 
-    }
-    const response = await axios.get(
-       backend +'/users',config
-    ); 
+      }
+    });
+
     const all_users = response.data
     var all_users_but_me = []
     {all_users.map((user) => {
-      if (user.id != id){
+      if (user.id != uid){
         all_users_but_me.push(user) 
       }
     })}
@@ -131,7 +127,6 @@ const Group = ( info ) => {
 
   const handleDialogClose = (value) => {
     setDialogOpen(false);
-    setSelectedValue(value);
   };
 
   const handleToggle = () => {
@@ -143,39 +138,39 @@ const Group = ( info ) => {
   };
 
   const handleCreate = async () => {
-    //console.log(added_friends_id) // added_friends_id should be sent as a body to backend
     try {
-      let config = {
+      const response = await axios.post(backend + "/chat/create", {
+        uid: added_friends_id
+      },{
         headers: {
           'Authorization': `Bearer ${token}`
         } 
+      });
+
+      if (response?.data?.id) {
+        console.log("success");
+        setCreated_group_id(response.data.id);
+        history.push({
+          pathname: "/chat", 
+          state: { 
+            username: location.state.username, 
+            group_id: created_group_id,
+            group_name: group_name
+          }
+        });
+      } else {
+        console.log(response.data);
       }
-      const response = await axios.post(backend + "/chat/create", {uid:added_friends_id},config);
-      //const { success, message } = response.data;
-      //if (success) {
-      //} else {
-      //  console.log(message);
-      //}
     } catch (e) {
       console.log(e);
     }
-    console.log('group:',group);
-  };
-
-  const onGetMessages = (groupName) => {
-    // socket.emit("join", { group: groupName, member: this.state.user });
-    // this.props.history.push({
-    //   pathname: "/chat",
-    //   state: { user: this.state.user, group: groupName },
-    // });
   };
 
   return (
     <div className="group">
       <Drawer
-        my_groups={my_groups}
-        onGetMessages={onGetMessages}
-        user={info.location.state.data.name}
+        user={location.state.username}
+        handleLogout={(token) => handleLogout(token)}
       ></Drawer>
       <div className="group-panel">
         <div className="group-header">CREATE NEW GROUP</div>
@@ -184,8 +179,8 @@ const Group = ( info ) => {
           <TextField
             style={{ marginRight: "20px" }}
             placeholder="Group Name"
-            value={group}
-            onChange={(e) => setGroup(e.target.value)}
+            value={group_name}
+            onChange={(e) => setGroup_name(e.target.value)}
           ></TextField>
         </div>
         <div className="friend-content">
@@ -221,7 +216,7 @@ const Group = ( info ) => {
           />
         </div>
         <div className="create-content">
-          <Button onClick={handleCreate} style={{ color: "white" }}>
+          <Button onClick={() => handleCreate()} style={{ color: "white" }}>
             Create
           </Button>
         </div>
@@ -230,4 +225,4 @@ const Group = ( info ) => {
   );
 };
 
-export default Group;
+export default withRouter(Group);
