@@ -18,13 +18,13 @@ function App() {
   const [token, setToken] = React.useState(null);
 
   const firebaseConfig = {
-    apiKey: "AIzaSyBISweht8fYIVVhM3WqwfZQ_5fDZW-SGVU",
-    authDomain: "web-test-6b88c.firebaseapp.com",
-    databaseURL: "https://web-test-6b88c.firebaseio.com",
-    projectId: "web-test-6b88c",
-    storageBucket: "web-test-6b88c.appspot.com",
-    messagingSenderId: "233711291286",
-    appId: "1:233711291286:web:3df48501376a357e5f2bb7"
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
   };
   if (!firebase.apps.length){
     firebase.initializeApp(firebaseConfig);

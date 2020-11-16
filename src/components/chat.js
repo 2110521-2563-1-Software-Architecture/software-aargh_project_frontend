@@ -144,29 +144,27 @@ const Chat = ({ history, handleLogout,db }) => {
         getData(snapshot.val());
       });
     getAllUsers();
-    setMessages(MESSAGE);
+    //setMessages(MESSAGE);
   };
 
   const getData = (values) => {
     let messagesVal = values;
-    let messages = _(messagesVal)
+    let msg = _(messagesVal)
                     .keys()
                     .map(messageKey => {
                       let cloned = _.clone(messagesVal[messageKey]);
                       cloned.key = messageKey;
                       return cloned;
                     }).value();
-    if (messages.length!=0){
-      console.log({messages})
+    if (msg.length!=0){
+      console.log("msg!=0:",{msg})
       var users_id = []
-      {messages.map((message) => {
-        users_id.push(message.uid)
+      var all_msg = []
+      {msg.map((m) => {
+        all_msg.push(m)
+        users_id.push(m.uid)
       })}
-      this.setState({
-        messages: messages,
-        users: users_id
-      });
-      console.log(this.state.messages)
+      setMessages(all_msg)
     } else {
       console.log("NO MESSAGE")
       setMessages([])
