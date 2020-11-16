@@ -15,13 +15,13 @@ import _ from 'lodash';
 const MESSAGE = [{ user: 'me', message: 'Hello' }, { user: 'me', message: 'I\'m me' }];
 
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  databaseURL: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyBISweht8fYIVVhM3WqwfZQ_5fDZW-SGVU",
+  authDomain: "web-test-6b88c.firebaseapp.com",
+  databaseURL: "https://web-test-6b88c.firebaseio.com",
+  projectId: "web-test-6b88c",
+  storageBucket: "web-test-6b88c.appspot.com",
+  messagingSenderId: "233711291286",
+  appId: "1:233711291286:web:3df48501376a357e5f2bb7"
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -43,6 +43,21 @@ const Chat = ({ history, handleLogout }) => {
 
   // ask yin for this
   const [refInput, setRefInput] = useState(null);
+
+  //[TODO] - recheck after get real group id
+  const getAllUsers = async () => { 
+    let config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      } 
+    }
+    const response = await axios.post(
+       backend +'/chat/detail',{id: location.state.group_id},config
+    ); 
+    console.log('ALL USERS')
+    console.log(response.data)
+    return response.data
+  }
 
   const onSendMessage = async () => {
     const response = await axios.post(backend + "/message/send", {
@@ -136,6 +151,7 @@ const Chat = ({ history, handleLogout }) => {
 
   const onGetMessages = async () => {
     console.log("get realtime message");
+    getAllUsers();
     setMessages(MESSAGE);
   };
 
