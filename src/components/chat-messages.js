@@ -57,6 +57,7 @@ class ChatMessages extends React.Component {
                         }
                       >
                         <img src={message.content}></img>
+                        {/* {message.content} */}
                       </div>
                     </div>
                   )}

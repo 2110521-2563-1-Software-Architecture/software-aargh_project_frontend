@@ -74,6 +74,7 @@ const NavBar = ({
   history,
   user,
   handleLogout,
+  onGetMessages = () => {},
   db
 }) => {
   const classes = useStyles();
@@ -120,6 +121,14 @@ const NavBar = ({
       });
   };
 
+  const toggleRead = async (gid) => {
+    let dbRef = db.database().ref('chat/' + uid + '/' + gid);
+    await dbRef.set({
+      cid: gid,
+      read: false
+    });
+  };
+
   useEffect(() => {
     onGetAllMyGroups();
   }, []);
@@ -150,20 +159,17 @@ const NavBar = ({
                   button
                   key={index}
                   className={classes.nested}
-                  onClick={async () => {
-                    let dbRef = db.database().ref('chat/' + uid + '/' + group.key)
-                      await dbRef.set({
-                        cid: group.key,
-                        read: false
-                      })
+                  onClick={() => {
+                    toggleRead(group.key);
+                    onGetMessages();
                     history.push({
                       pathname: "/chat", 
                       state: { 
                         username: user, 
-                        group_id: group.key,  // should be selected group id
-                        group_name: group.key   // should be selected group name
+                        group_id: group.key,
+                        group_name: group.key
                       }
-                    })
+                    });
                   }}
                 >
                   <ListItemText primary={group.key} />

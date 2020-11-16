@@ -32,8 +32,7 @@ const Chat = ({ history, handleLogout,db }) => {
     const response = await axios.post(
        backend +'/chat/detail',{id: location.state.group_id},config
     ); 
-    console.log('ALL USERS')
-    console.log(response.data)
+    console.log('ALL USERS', response.data)
     return response.data
   }
 
@@ -57,7 +56,6 @@ const Chat = ({ history, handleLogout,db }) => {
   };
 
   const uploadPhoto = () => {
-    console.log("from upload",currentPhotoFile)
     if (currentPhotoFile) {
 
       const uploadTask = db
@@ -87,15 +85,12 @@ const Chat = ({ history, handleLogout,db }) => {
 
   const onChoosePhoto = event => {
     if (event.target.files && event.target.files[0]) {
-        //console.log("event:",event.target.files[0])
         setIsLoading(true);
         setCurrentPhotoFile(event.target.files[0]);
-        //[...picture, e.target.files[0]]
         // Check this file is an image?
         const prefixFiletype = event.target.files[0].type.toString();
         if (prefixFiletype.indexOf('image/') === 0) {
             uploadPhoto();
-            // console.log(this.currentPhotoFile.name)
         } else {
             setIsLoading(false);
             console.log('This file is not an image');
@@ -106,9 +101,6 @@ const Chat = ({ history, handleLogout,db }) => {
   }
 
   const onSendImage = async () => {
-    console.log("onSent");
-    console.log(location.state.group_id)
-    console.log({image_url, token})
     try {
       const response = await axios.post(backend + "/message/send", {
         cid: location.state.group_id,
@@ -119,7 +111,6 @@ const Chat = ({ history, handleLogout,db }) => {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log({response});
       if (response.data) {
         console.log(response.data);
         console.log("sent image");
@@ -138,13 +129,12 @@ const Chat = ({ history, handleLogout,db }) => {
   };
 
   const onGetMessages = async () => {
-    console.log("get realtime message");
+    console.log("onGetMessages: group_id = ",location.state.group_id)
     var app = db.database().ref('message/'+location.state.group_id);
     app.on('value', snapshot => {
         getData(snapshot.val());
       });
     getAllUsers();
-    //setMessages(MESSAGE);
   };
 
   const getData = (values) => {
@@ -157,7 +147,6 @@ const Chat = ({ history, handleLogout,db }) => {
                       return cloned;
                     }).value();
     if (msg.length!=0){
-      console.log("msg!=0:",{msg})
       var users_id = []
       var all_msg = []
       {msg.map((m) => {
@@ -169,7 +158,6 @@ const Chat = ({ history, handleLogout,db }) => {
       console.log("NO MESSAGE")
       setMessages([])
     }
-    //console.log(this.state.users)
   };
 
   useEffect(() => {
@@ -185,6 +173,7 @@ const Chat = ({ history, handleLogout,db }) => {
       <Drawer
         user={location.state.username}
         handleLogout={(token) => handleLogout(token)}
+        onGetMessages={onGetMessages}
         db={db}
       ></Drawer>
       <div className="chat-panel">
@@ -204,6 +193,7 @@ const Chat = ({ history, handleLogout,db }) => {
           className="chat-content"
           style={{ display: "flex", flexDirection: "column" }}
         >
+          {console.log(messages)}
           <ChatMessages
             messages={messages}
             user={location.state.username}
@@ -217,17 +207,14 @@ const Chat = ({ history, handleLogout,db }) => {
             fullWidth="true"
             value={currentMessage}
             onChange={(e) => setCurrentMessage(e.target.value)}
-            onKeyDown={() => onTextFiledPressEnter()}
+            onKeyDown={onTextFiledPressEnter}
           ></TextField>
           <Button onClick={() => onSendMessage()}>Send</Button>
         </div>
-        {/* what nrefInput for? */}
         <input 
-          //ref={el => { refInput = el }}
           accept="image/*"
           className="viewInputGallery"
           type="file"
-          //onChange={() => onChoosePhoto()}
           onChange = {onChoosePhoto}
         />
       </div>
