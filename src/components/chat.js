@@ -44,7 +44,10 @@ const Chat = ({ history, handleLogout }) => {
   // ask yin for this
   const [refInput, setRefInput] = useState(null);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 86b3a9ce1f29d1828ea6eb404436ead81a278f8f
   //[TODO] - recheck after get real group id
   const getAllUsers = async () => { 
     let config = {
