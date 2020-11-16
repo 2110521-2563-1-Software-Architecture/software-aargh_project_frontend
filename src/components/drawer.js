@@ -97,7 +97,6 @@ const NavBar = ({
                       return cloned;
                     }).value();
     if (chats.length!=0){
-      console.log({chats})
       var all_my_chats = []
       {chats.map((chat) => {
           all_my_chats.push(chat)
@@ -107,7 +106,6 @@ const NavBar = ({
       console.log("NO GROUP")
       setMy_groups([])
     }
-    //console.log(this.state.users)
   };
 
   const handleOpen = () => {
@@ -125,7 +123,7 @@ const NavBar = ({
     let dbRef = db.database().ref('chat/' + uid + '/' + gid);
     await dbRef.set({
       cid: gid,
-      read: false
+      read: true
     });
   };
 
@@ -171,8 +169,10 @@ const NavBar = ({
                     });
                   }}
                 >
-                  <ListItemText primary={group.key} />
-                  {group.read && (
+                  <div style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
+                    {group.key}
+                  </div>
+                  {!group.read && (
                     <ListItemSecondaryAction edge="end">
                       <div
                           style={{

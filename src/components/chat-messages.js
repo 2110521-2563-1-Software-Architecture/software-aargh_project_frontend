@@ -14,7 +14,6 @@ class ChatMessages extends React.Component {
 
   async componentDidMount() {
     this.setState({ messages: this.props.messages, user: this.props.user});
-    console.log(this.props.messages, this.props.user);
   }
 
   render() {

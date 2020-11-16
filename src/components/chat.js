@@ -10,19 +10,12 @@ import axios from "axios";
 import backend from "../ip";
 import _ from 'lodash';
 
-// MOCK DATA
-const MESSAGE = [{ user: 'me', message: 'Hello' }, { user: 'me', message: 'I\'m me' }];
-
 const Chat = ({ history, handleLogout,db }) => {
   const location = useLocation();
   const token = JSON.parse(localStorage.getItem('token'));
   const [currentMessage, setCurrentMessage] = useState("");
-  const [image_url, setImage_url] = useState("");
-  const [currentPhotoFile, setCurrentPhotoFile] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
 
-  //[TODO] - recheck after get real group id
   const getAllUsers = async () => { 
     let config = {
       headers: {
@@ -32,7 +25,6 @@ const Chat = ({ history, handleLogout,db }) => {
     const response = await axios.post(
        backend +'/chat/detail',{id: location.state.group_id},config
     ); 
-    console.log('ALL USERS', response.data)
     return response.data
   }
 
@@ -55,9 +47,8 @@ const Chat = ({ history, handleLogout,db }) => {
     }
   };
 
-  const uploadPhoto = () => {
+  const uploadPhoto = (currentPhotoFile) => {
     if (currentPhotoFile) {
-
       const uploadTask = db
         .storage().ref(currentPhotoFile.name)
         .put(currentPhotoFile)
@@ -66,46 +57,38 @@ const Chat = ({ history, handleLogout,db }) => {
             'state_changed',
             null,
             err => {
-              setIsLoading(false);
               console.log(err.message);
             },
             () => {
               uploadTask.snapshot.ref.getDownloadURL().then(url => {
-                console.log(url)
-                setIsLoading(false);
-                setImage_url(url);
-                onSendImage();
+                onSendImage(url);
               })
             }
         )
     } else {
-      setIsLoading(false);
       console.log('File is null');
     }
   }
 
   const onChoosePhoto = event => {
     if (event.target.files && event.target.files[0]) {
-        setIsLoading(true);
-        setCurrentPhotoFile(event.target.files[0]);
         // Check this file is an image?
         const prefixFiletype = event.target.files[0].type.toString();
         if (prefixFiletype.indexOf('image/') === 0) {
-            uploadPhoto();
+          uploadPhoto(event.target.files[0]);
         } else {
-            setIsLoading(false);
-            console.log('This file is not an image');
+          console.log('This file is not an image');
         }
     } else {
-      setIsLoading(false);
+      console.log('Choose file error')
     }
   }
 
-  const onSendImage = async () => {
+  const onSendImage = async (url) => {
     try {
       const response = await axios.post(backend + "/message/send", {
         cid: location.state.group_id,
-        content: image_url,
+        content: url,
         type: "IMAGE"
       }, {
         headers: {
@@ -115,6 +98,7 @@ const Chat = ({ history, handleLogout,db }) => {
       if (response.data) {
         console.log(response.data);
         console.log("sent image");
+        onGetMessages();
       } else {
         console.log("error");
       }
@@ -130,7 +114,6 @@ const Chat = ({ history, handleLogout,db }) => {
   };
 
   const onGetMessages = async () => {
-    console.log("onGetMessages: group_id = ",location.state.group_id)
     var app = db.database().ref('message/'+location.state.group_id);
     app.on('value', snapshot => {
         getData(snapshot.val());
@@ -161,14 +144,6 @@ const Chat = ({ history, handleLogout,db }) => {
     }
   };
 
-  useEffect(() => {
-    onGetMessages();
-  }, []);
-
-  useEffect(() => {
-    uploadPhoto();
-  }, [currentPhotoFile]);
-
   return (
     <div className="chat">
       <Drawer
@@ -178,23 +153,25 @@ const Chat = ({ history, handleLogout,db }) => {
         db={db}
       ></Drawer>
       <div className="chat-panel">
-        <div
-          className="chat-group-name" 
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            padding: "16px 16px",
-            fontSize: "18px"
-          }}
-        >
-          {location.state.group_name.toUpperCase()}
-        </div>
+        {location.state.group_name ?   
+          <div
+            className="chat-group-name" 
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              padding: "16px 16px",
+              fontSize: "18px"
+            }}
+          >
+            {location.state.group_name.toUpperCase()}
+          </div>
+          : <div/>
+        }
         <div
           className="chat-content"
           style={{ display: "flex", flexDirection: "column" }}
         >
-          {console.log(messages)}
           <ChatMessages
             messages={messages}
             user={location.state.username}

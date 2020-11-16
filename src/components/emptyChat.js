@@ -18,19 +18,6 @@ class EmptyChat extends React.Component {
     group: "",
   };
 
-  componentDidMount() {
-    try {
-      console.log("componentDidMount");
-      // socket.emit('getGroupUpdates', this.props.location.state.user)
-      // socket.on('groupinfo', (data) => {
-      //     this.setState({ available_groups: data.group, my_groups: data.joinedGroup, user: this.props.location.state.user })
-      //     console.log(this.state)
-      // })
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
   onGetMessages = (groupName) => {
     // socket.emit("join", { group: groupName, member: this.state.user });
     this.props.history.push({
