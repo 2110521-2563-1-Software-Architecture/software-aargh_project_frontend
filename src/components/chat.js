@@ -23,7 +23,6 @@ const Chat = ({ history, handleLogout,db }) => {
         'Authorization': `Bearer ${token}`
       } 
     }
-    console.log('GID',location.state.group_id)
 
     const response = await axios.post(
        backend +'/chat/detail',{id: location.state.group_id},config
@@ -124,19 +123,18 @@ const Chat = ({ history, handleLogout,db }) => {
         getData(snapshot.val());
       });
     var  all_users = await getAllUsers();
-    setAllUsers(all_users)
-    console.log('all_users:',all_users)
+    setAllUsers(all_users);
   };
 
   const getData = (values) => {
     let messagesVal = values;
     let msg = _(messagesVal)
-                    .keys()
-                    .map(messageKey => {
-                      let cloned = _.clone(messagesVal[messageKey]);
-                      cloned.key = messageKey;
-                      return cloned;
-                    }).value();
+      .keys()
+      .map(messageKey => {
+        let cloned = _.clone(messagesVal[messageKey]);
+        cloned.key = messageKey;
+        return cloned;
+      }).value();
     if (msg.length!=0){
       var users_id = []
       var all_msg = []

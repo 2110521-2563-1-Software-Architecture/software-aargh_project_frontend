@@ -21,7 +21,6 @@
   display: flex;
   justify-content: flex-start;
   width: auto;
-  /* word-wrap: break-word; */
 }
 
 .other-message {
@@ -37,22 +36,18 @@
   max-width: 300px;
 }
 
-/*.other-message img{*/
-/*  float: left;*/
-/*  max-width: 60px;*/
-/*  width: 100%;*/
-/*  margin-right: 20px;*/
-/*  border-radius: 50%;*/
-/*}*/
+.other-message-image {
+  padding: 0.25em 0.5em;
+  clear: both;
+  float: left;
+  width: fit-content;
+  margin-right: 10px;
+}
 
 .my-message-container {
-  /* margin-left: 50%; */
   margin-right: 10%;
   display: flex;
   align-items: flex-end;
-  /* float:right; */
-  /* word-wrap: break-word; */
-  /* width: 100%; */
 }
 
 .my-message {
@@ -63,4 +58,10 @@
   border-radius: 11px;
   width: fit-content;
   max-width: 300px;
+}
+
+.my-message-image {
+  padding: 0.25em 0.5em;
+  align-items: flex-end;
+  width: fit-content;
 }
