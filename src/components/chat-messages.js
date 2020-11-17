@@ -9,20 +9,23 @@ class ChatMessages extends React.Component {
   state = {
     messages: [],
     user: false,
-    all_users: []
+    all_users: [],
+    uid: JSON.parse(localStorage.getItem('uid'))
   };
-
-  async componentDidMount() {
-    this.setState({ messages: this.props.messages, user: this.props.user});
-  }
 
   uidToUsername = (uid) => {
     var username = ""
-    this.state.all_users.map((user) => {
-      if (user.id == uid) {
-        username = user.username
-      }
-    })
+    if (this.props.all_users){
+      this.props.all_users.uid.map((user) => {
+        if (user.id == uid) {
+          username = user.username
+          console.log('UID')
+          console.log(user.uid)
+          console.log('TO USERNAME')
+          console.log(user.username)
+        }
+      })
+    }
     if (username != ""){
       return username
     } else {
@@ -38,13 +41,13 @@ class ChatMessages extends React.Component {
               <div
                 className={
                   // TODO: message.user === this.props.user
-                  message.type === "TEXT" && message.uid === "5facd430129c05000ed5b5b7"
+                  message.type === "TEXT" && message.uid === this.state.uid
                     ? "my-message-container order"
                     : "other-message-container order"
                 }
               >
                 <div style={{ fontSize: "12px", marginBottom: "3px" }}>
-                  {message.user === this.props.user ? null : message.user}
+                  {message.uid === this.state.uid ? null : this.uidToUsername(message.uid)}
                 </div>
                 {/* here */}
                 <div>
@@ -52,7 +55,7 @@ class ChatMessages extends React.Component {
                     <div style={{ display: "flex", flexDirection: "row" }}>
                       <div
                         className={
-                          message.user === this.props.user
+                          message.uid === this.state.uid
                             ? "my-message"
                             : "other-message"
                         }
@@ -64,7 +67,7 @@ class ChatMessages extends React.Component {
                     <div>
                       <div
                         className={
-                          message.user === this.props.user
+                          message.uid === this.state.uid
                             ? "my-message"
                             : "other-message"
                         }

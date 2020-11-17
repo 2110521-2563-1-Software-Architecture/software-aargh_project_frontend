@@ -28,6 +28,8 @@ const Chat = ({ history, handleLogout,db }) => {
     const response = await axios.post(
        backend +'/chat/detail',{id: location.state.group_id},config
     ); 
+
+    // console.log("ALL USERS:",response.data)
     return response.data
   }
 
@@ -123,6 +125,7 @@ const Chat = ({ history, handleLogout,db }) => {
       });
     var  all_users = await getAllUsers();
     setAllUsers(all_users)
+    console.log('all_users:',all_users)
   };
 
   const getData = (values) => {
@@ -179,7 +182,7 @@ const Chat = ({ history, handleLogout,db }) => {
           <ChatMessages
             messages={messages}
             user={location.state.username}
-            all_users = {all_users}
+            all_users={all_users}
           ></ChatMessages>
         </div>
         <div className="message-box">
