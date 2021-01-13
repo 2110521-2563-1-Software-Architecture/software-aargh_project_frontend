@@ -1,0 +1,48 @@
+.box{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-between;
+}
+
+.header{
+    font-size: 2em;
+    font-weight: bold;
+    margin-top: 50px;
+}
+
+.row{
+    margin-bottom: 24px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.form{
+    width: 320px;
+}
+
+.outlinedBtn{
+    width: 104px;
+    height: 36px;
+    color: #105368;
+    border: 1px solid #105368;
+    border-radius: 5px;
+    text-align: center;
+    margin-right: 120px;
+}
+
+.containedBtn{
+    width: 104px;
+    height: 36px;
+    background-color: #105368;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+}
+
+.row-grid{
+    display: grid;
+    grid-row-gap: 64px;
+}

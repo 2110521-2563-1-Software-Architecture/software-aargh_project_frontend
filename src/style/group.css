@@ -1,0 +1,79 @@
+.group {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-bar {
+  height: 100vh;
+}
+
+.group-panel {
+  margin-left: 240px;
+  height: calc(100% - 55px);
+  width: calc(100% - 240px);
+}
+
+.olive-bg {
+  background-color: olive;
+}
+
+.group-username {
+  background-color: #105368;
+  color: white;
+  height: 55px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 15px;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.chat-username p {
+  margin: 5px;
+}
+
+.logout-button {
+  color: white;
+}
+
+.group-header {
+  margin: 50px;
+  margin-top: 200px;
+  /* background-color: white; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.friend-content {
+  margin-top: 5px;
+  font-weight: bold;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-right: 10px;
+}
+.create-content {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-content button {
+  width: 100px;
+  background-color: #105368;
+}
+.friend-content button {
+  width: 200px;
+  background-color: #105368;
+}
+.group-content button {
+  width: 100px;
+  background-color: #105368;
+}

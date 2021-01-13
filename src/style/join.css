@@ -1,0 +1,44 @@
+.root {
+  height: 100vh;
+}
+
+.titleBar {
+  background-color: #105368;
+  color: white;
+  font-style: normal;
+  height: 8vh;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+  margin-right: 10px;
+}
+
+.center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  height: 200px;
+  width: 15em;
+  text-align: center;
+}
+
+.center h1 {
+  text-align: left;
+}
+
+.containedBtn{
+  width: 104px;
+  height: 36px;
+  background-color: #105368;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+}
